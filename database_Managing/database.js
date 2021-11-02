@@ -90,3 +90,34 @@ dfd.read_csv()
 
 // const cityRef = db.collection("dataGouv_Grenoble");
 // cityRef.doc().set(data);
+
+// ############ ############ ############ ############ ############ ############
+// ############ ############       Update data       ############ ############
+// ############ ############ ############ ############ ############ ############ 
+// import {
+//   geohashForLocation,
+//   geohashQueryBounds,
+//   distanceBetween
+
+const geofire = require("geofire-common")
+
+
+const hash = geofire.geohashForLocation([51.5074, 0.1278]);
+console.log(hash)
+
+//const hash = geohashForLocation([51.5074, 0.1278]);
+// echelle = 'Nom territoire'
+// valeur = "Grésivaudan"
+
+// const cityRef = db.collection("dataGouv_Grenoble");
+// cityRef.where(echelle, '==', valeur).get()
+// .then(querySnapshot => {
+//   li = new Array();  
+
+//   querySnapshot.docs.map(doc => { li.push(doc.data()) });
+  
+//   // res.send(li) pour le retour de l'api
+//   // =====> https://pretagteam.com/question/asyncawait-on-firebase-queries
+  
+//   console.log(li)
+// });
