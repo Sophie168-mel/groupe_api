@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "danfojs": "^0.3.3",
     "express": "^4.17.1",
-    "firebase": "^9.2.0"
+    "firebase": "^9.2.0",
+    "firebase-admin": "^10.0.0"
   }
 }

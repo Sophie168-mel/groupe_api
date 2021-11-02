@@ -1,19 +1,32 @@
-import { initializeApp } from 'firebase/app';
+var admin = require("firebase-admin");
+const dfd = require("danfojs-node")
 
-// TODO: Replace the following with your app's Firebase project configuration
-const firebaseConfig = {
-  //...
-};
+var serviceAccount = require("./credential.json");
 
-const app = initializeApp(firebaseConfig);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = admin.firestore();
 
-// Get a list of cities from your database
-async function getCities(db) {
-  const citiesCol = collection(db, 'cities');
-  const citySnapshot = await getDocs(citiesCol);
-  const cityList = citySnapshot.docs.map(doc => doc.data());
-  return cityList;
-}
+
+const data = {
+    name: 'Los Angeles',
+    state: 'CA',
+    country: 'USA'
+  };
+  
+  // Add a new document in collection "cities" with ID 'LA'
+// let setDoc = db.collection('cities').doc('LA').set(data);
+
+var csv = require('jquery-csv');
+
+json_data = [{A: 1, B: 2}, {A: 1, B: 2}]
+//df = new dfd.DataFrame(json_data)
+
+dfd.read_csv("/home/etudiant-m2/Documents/OpenData/groupe_api/database_Managing/data.csv")
+.then(df => {
+    df.head().print()
+}).catch(err =>{
+    
+})

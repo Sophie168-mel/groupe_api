@@ -33,6 +33,8 @@ bower_components
 
 credential.json
 
+*.csv
+
 # node-waf configuration
 .lock-wscript
 
