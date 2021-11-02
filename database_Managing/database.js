@@ -24,9 +24,10 @@ var csv = require('jquery-csv');
 json_data = [{A: 1, B: 2}, {A: 1, B: 2}]
 //df = new dfd.DataFrame(json_data)
 
-dfd.read_csv("/home/etudiant-m2/Documents/OpenData/groupe_api/database_Managing/data.csv")
+dfd.read_csv("./database_Managing/data.csv")
 .then(df => {
-    df.head().print()
+    df1 = df.iloc({rows: [":15"], columns: [":4"]})
+    console.log(df1.print())
 }).catch(err =>{
-    
+    console.log()
 })
