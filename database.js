@@ -1,46 +1,18 @@
-var admin = require("firebase-admin");
-const geofire = require("geofire-common")
-const dfd = require("danfojs-node");
-
+const geofire = require("geofire-common");
+const admin = require("firebase-admin");
 var serviceAccount = require("./credential.json");
+
+// Connexion à la base de donnée
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 const db = admin.firestore();
 
-
-
-// json_data = [{A: 1, B: 2}, {A: 1, B: 2}]
-// var df
-
-// url = "https://data.mobilites-m.fr/api/points/json?types=autostop"
-
-// fetch(url)
-//   .then(res => res.json())
-//   .then(json_data => {
-//     df = new dfd.DataFrame(json_data["features"]);
-//     console.log(df.head().print());
-//   });
-
-
-/*
-df1 = df.iloc({rows: [":15"], columns: [":4"]})
-console.log(df1.print())
-
-dfd.read_csv("./database_Managing/data.csv")
-.then(df => {
-  console.log(df)
-  df.head().print()
-}).catch(err =>{
-  console.log(err)
-})
-*/
-
-
 // ############ ############ ############ ############ ############ ############
 // ############ ############       Get list data       ############ ############
 // ############ ############ ############ ############ ############ ############ 
-function GetValueWhere(collection, echelle, valeur, limit=0){
+
+exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
   const cityRef = db.collection(collection);
   if (limit>0){
@@ -50,86 +22,63 @@ function GetValueWhere(collection, echelle, valeur, limit=0){
   }
   query.get()
   .then(querySnapshot => {
-   li = new Array();  
-   querySnapshot.docs.map(doc => { li.push(doc.data()) });
-   // res.send(li) pour le retour de l'api
-   // =====> https://pretagteam.com/question/asyncawait-on-firebase-queries
-   console.log(li) // Sorted value here !
-  });
+    let li = new Array();  
+    querySnapshot.docs.map(doc => { li.push(doc.data()) });
+    res.status(200).json({"Liste de valeur":li}) 
+  }).catch(err =>{
+    res.status(404)
+  })
 }
 
 // ############ ############ ############ ############ ############ ############
 // ############ ############       Get one data       ############ ############
 // ############ ############ ############ ############ ############ ############ 
-function getData(collection, id){
+
+exports.getData = function (res, collection, id){
 
    const cityRef = db.collection(collection); //"dataGouv_Grenoble"
    cityRef.doc(id).get()
    .then(doc => {
-      console.log(doc.data())
-    });
+     res.status(200).json(doc.data())
+    }).catch(err=>{
+      res.status(404)
+    })
 }
+
 // ############ ############ ############ ############ ############ ############
 // ############ ############       Get count data       ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
-function GetCountValue(collection, echelle, valeur){
+exports.GetCountValue = function (res, collection, echelle, valeur){
 
   const cityRef = db.collection(collection);
   var query = cityRef.where(echelle, '==', valeur)
   query.get()
   .then(querySnapshot => {
-    console.log(querySnapshot.size)
-    // res.send(querySnapshot.size) pour le retour de l'api
-    // =====> https://pretagteam.com/question/asyncawait-on-firebase-queries
-  });
+    res.status(200).send(querySnapshot.size)
+  }).catch(err=>{
+    res.status(404)
+  })
 }
+
 // ############ ############ ############ ############ ############ ############
 // ############ ############       Post data       ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
-function AddPoint(collection, data){
+exports.AddPoint = function (res, collection, data){
   const cityRef = db.collection(collection);
   cityRef.doc().set(data).then(()=> {
-    console.log("Succes")
+    res.send(200)
   }).catch(err=>{
-    console.log(err)
+    res.send(404)
   });
-}
-
-// ############ ############ ############ ############ ############ ############
-// ############ ############       Update to geo data  ############ ############
-// ############ ############ ############ ############ ############ ############ 
-
-function updateToGeoData(collection){
-  /**
-   * Update value of API, with geohash for geo request.
-   * Value:
-   *  coollection - str : Name of collection concerned
-   * Return: Nothing
-   */
-  var cityRef = db.collection(collection);
-  cityRef.get()
-  .then(querySnapshot => {
-    querySnapshot.docs.map(doc => { 
-      let d = doc.data()
-      let target = doc.id
-      let hash = geofire.geohashForLocation([parseInt(d["Latitude"]), parseInt(d["Longitude"])]);
-      cityRef.doc(target).update({
-        geohash: hash,
-      }).then(() => {
-        console.log("Success")
-      }).catch(err => {
-        console.log(err)
-      })
-    });
-  })
 }
 
 // ############ ############ ############ ############ ############ ############
 // ############ ############       Research in geo data  ############ ############
 // ############ ############ ############ ############ ############ ############ 
-function getArround(collection, center, rayon){
+
+exports.getArround = function getArround(res, collection, center, rayon){
   var radiusInM = rayon * 1000;
   var bounds = geofire.geohashQueryBounds(center, radiusInM);
   var promises = [];
@@ -160,12 +109,41 @@ function getArround(collection, center, rayon){
     
     return matchingDocs;
   }).then((matchingDocs) => {
-    li = Array()
+    let li = Array()
     matchingDocs.map(doc => {
       li.push(doc.data());
     })
-    console.log(li);
+    res.status(200).json({"Liste of li": li});
   });
+}
+
+// ############ ############ ############ ############ ############ ############
+// ############ ############  Tool:Update to geo data  ############ ############
+// ############ ############ ############ ############ ############ ############ 
+
+function updateToGeoData(collection){
+  /**
+   * Update value of API, with geohash for geo request.
+   * Value:
+   *  coollection - str : Name of collection concerned
+   * Return: Nothing
+   */
+  var cityRef = db.collection(collection);
+  cityRef.get()
+  .then(querySnapshot => {
+    querySnapshot.docs.map(doc => { 
+      let d = doc.data()
+      let target = doc.id
+      let hash = geofire.geohashForLocation([parseInt(d["Latitude"]), parseInt(d["Longitude"])]);
+      cityRef.doc(target).update({
+        geohash: hash,
+      }).then(() => {
+        console.log("Success")
+      }).catch(err => {
+        console.log(err)
+      })
+    });
+  })
 }
 
 // ############ ############ ############ ############ ############ ############
@@ -173,8 +151,11 @@ function getArround(collection, center, rayon){
 // ############ ############ ############ ############ ############ ############ 
 
 
-var test = false
+var test = false;
+
 if (test == true){
+  const collection = "dataGouv_Grenoble"
+
   collection = "dataGouv_Grenoble"
   updateToGeoData(collection)
   
