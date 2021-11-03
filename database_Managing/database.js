@@ -101,7 +101,7 @@ function AddPoint(collection, data){
 // ############ ############       Update to geo data  ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
-function updateData(collection){
+function updateToGeoData(collection){
   /**
    * Update value of API, with geohash for geo request.
    * Value:
@@ -127,7 +127,7 @@ function updateData(collection){
 }
 
 // ############ ############ ############ ############ ############ ############
-// ############ ############       Resaerch in geo data  ############ ############
+// ############ ############       Research in geo data  ############ ############
 // ############ ############ ############ ############ ############ ############ 
 function getArround(collection, center, rayon){
   var radiusInM = rayon * 1000;
@@ -167,8 +167,6 @@ function getArround(collection, center, rayon){
     console.log(li);
   });
 }
-  
-  
 
 // ############ ############ ############ ############ ############ ############
 // ############ ############      Test geo data         ############ ############
@@ -176,11 +174,9 @@ function getArround(collection, center, rayon){
 
 
 var test = false
-
-
 if (test == true){
   collection = "dataGouv_Grenoble"
-  updateData(collection)
+  updateToGeoData(collection)
   
   id = "1861" // en str uniquement !
   getData(collection, id)
@@ -203,25 +199,3 @@ if (test == true){
   var rayon = 50 // en km
   getArround(collection, center, rayon)
 }
-
-
-
-
-
-
-//const hash = geohashForLocation([51.5074, 0.1278]);
-// echelle = 'Nom territoire'
-// valeur = "Grésivaudan"
-
-// const cityRef = db.collection("dataGouv_Grenoble");
-// cityRef.where(echelle, '==', valeur).get()
-// .then(querySnapshot => {
-//   li = new Array();  
-
-//   querySnapshot.docs.map(doc => { li.push(doc.data()) });
-  
-//   // res.send(li) pour le retour de l'api
-//   // =====> https://pretagteam.com/question/asyncawait-on-firebase-queries
-  
-//   console.log(li)
-// });
