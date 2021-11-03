@@ -13,6 +13,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "danfojs": "^0.3.3",
+    "danfojs-node": "^0.3.3",
+    "express": "^4.17.1",
+    "node-fetch2": "^1.6.3",
+    "node-localstorage": "^2.2.1",
+    "xhr2": "^0.2.1"
   }
 }
