@@ -23,20 +23,33 @@ function IsRequestHeaderAcceptValid(req) {
         }
 }
 
-app.get('/pouces', function(req, res){
+app.get('/map', function(req, res){
 	if (IsRequestHeaderAcceptValid(req)) 
 	{
 		var zoom = req.query.zoom;
 		var value = req.query.value.toString();
-		if ((zoom == "code_departement" | zoom == "ID territoire" | zoom == "code_region")) 
+		var center = req.query.center.toString().split(",");
+		var rayon = parseFloat(req.query.center.toString());
+
+		var centerArr=centerArr.map(Number);
+		var message=""
+
+		if(!centerArr instanceof Array){
+			message="variable centre n'est pas bien définie"
+		}
+		else if(rayon%1==0){
+			message="variable rayon est mal définie"
+		}
+		else if ((zoom != "code_departement" | zoom != "ID territoire" | zoom != "code_region")) 
 		{
-     			var center = [45.140195, 5.673187];
-     			var rayon = 50 // en km
-     			database.getArround(res, collection, center, rayon)
+			message="  Variable zoom non definie et\/ou non valorisée dans l\'URL. Valeurs possibles: ID territoire ou code_departement ou code_region"
+			     			
      			//database.GetValueWhere(res, collection, db, zoom, value)
   		}
 		else {
-	  		res.send("Variable zoom non definie et\/ou non valorisée dans l\'URL. Valeurs possibles: code_commune ou code_departement ou code_region");
+			database.getArround(res, collection, centerArr, rayon)
+			message=" good execution getArround function"	
+	  		res.send(message);
 		}
 	}
 	else
