@@ -28,7 +28,7 @@ exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
     querySnapshot.docs.map(doc => { li.push(doc.data()) });
     res.status(200).json({"Liste de valeur":li}) 
   }).catch(err =>{
-    res.status(404)
+    res.status(404).send("ERROR: NO DATA");
   })
 }
 
@@ -43,7 +43,7 @@ exports.getData = function (res, collection, id){
    .then(doc => {
       returnFormat(res, doc.data())
     }).catch(err=>{
-      res.status(404)
+      res.status(404).send("ERROR: NO DATA");
     })
 }
 
@@ -72,7 +72,7 @@ exports.AddPoint = function (res, collection, data){
   cityRef.doc().set(data).then(()=> {
     returnFormat(res, "SUCCESS");
   }).catch(err=>{
-    res.send(404)
+    res.status(404).send("ERROR: DATA NOT SEND");
   });
 }
 
@@ -116,6 +116,8 @@ exports.getArround = function (res, collection, center, rayon){
       li.push(doc.data());
     })
     returnFormat(res, li);
+  }).catch(err=>{
+    res.status(404).send("ERROR: NO DATA");
   });
 }
 
@@ -130,7 +132,6 @@ function updateToGeoData(collection){
    *  coollection - str : Name of collection concerned
    * Return: Nothing
    */
-  console.log(collection)
   var cityRef = db.collection(collection);
   cityRef.get()
   .then(querySnapshot => {
@@ -154,12 +155,12 @@ function updateToGeoData(collection){
 // ############ ############ ############ ############ ############ ############ 
 
 function returnFormat(res, val){
-  if (val == "SUCCESS"){
-    res.status(200);
+  if (val == "SUCCESS" ){
+    res.status(200).send("OK");
   } else {
     let msg;
-    if(typeof val != "object" ){
-      msg = {"Resultat": val};
+    if (typeof val != "object"){
+      msg = [{"resultat":val}];
     } else if (Array.isArray(val) != true){
       msg = [val];
     } else {
@@ -200,8 +201,6 @@ if (test == true){
   }
   var x = new res()
   x.send("hello")
-
-  const collection = "dataGouv_Grenoble"
 
   collection = "dataGouv_Grenoble"
   updateToGeoData(res, collection)
