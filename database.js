@@ -1,5 +1,6 @@
 const geofire = require("geofire-common");
 const admin = require("firebase-admin");
+const dfd = require("danfojs");
 const js2rdf = require("./tool/json_to_rdf")
 const js2xml = require("./tool/json_to_xml")
 var serviceAccount = require("./credential.json");
@@ -9,6 +10,33 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 const db = admin.firestore();
+
+// ############ ############ ############ ############ ############ ############
+// ############ ############      Add file data         ############ ############
+// ############ ############ ############ ############ ############ ############ 
+
+function updateDatabase(){
+  dfd.read_csv("./data.csv") //assumes file is in CWD
+  .then(df => {
+  
+    df.head().print()
+    let collection = "dataPoint"
+    for(d in df){
+      const cityRef = db.collection(collection);
+      cityRef.doc().set(d).then(()=> {
+        console.log("SUCCESS")
+      }).catch(err=>{
+        console.log("ERROR: DATA NOT SEND");
+      });
+    } 
+  }).catch(err=>{
+     console.log(err);
+  })
+
+  
+}
+
+updateDatabase()
 
 // ############ ############ ############ ############ ############ ############
 // ############ ############       Get list data       ############ ############
@@ -191,6 +219,7 @@ function returnFormat(res, val){
     })
   } 
 }
+
 
 // ############ ############ ############ ############ ############ ############
 // ############ ############      Test geo data         ############ ############
