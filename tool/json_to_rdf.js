@@ -13,15 +13,15 @@ function individu_rdf(json_individu){
     osm_link = "https://www.openstreetmap.org/query?lat=" + json_individu['latitude'] + "&lon=" + json_individu['longitude'] + "#map=19/" + json_individu['latitude'] + "/" + json_individu['longitude'] + "&layers=N'";
     
     res += '<geo:Point rdf:about="' + osm_link + '" rdf:ID="' + json_individu['id'] + '">\n';
-    res += '\t<geo:lat>' + json_individu['latitude'] + '</geo:lat>\n'
-    res += '\t<geo:long>' + json_individu['longitude'] + '</geo:long>\n'
+    res += '\t<geo:lat>' + json_individu['Latitude'] + '</geo:lat>\n'
+    res += '\t<geo:long>' + json_individu['Longitude'] + '</geo:long>\n'
     res += '\t<rdf:comment>' + json_individu['commentaire'] + '</rdf:comment>\n'
     res += '</geo:Point>';
 
     return res;
 }
 
-exports.json_to_rdf = function (json_to_convert){
+exports.json_to_rdf = function (json_to_convert, isCompute=false){
 
     var myRdf;
     myRdf = '<?xml version="1.0"?>\n\<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n\t\

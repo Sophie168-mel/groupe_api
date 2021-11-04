@@ -159,8 +159,10 @@ function returnFormat(res, val){
     res.status(200).send("OK");
   } else {
     let msg;
+    let isCompute = false;
     if (typeof val != "object"){
       msg = [{"resultat":val}];
+      isCompute = true;
     } else if (Array.isArray(val) != true){
       msg = [val];
     } else {
@@ -168,7 +170,7 @@ function returnFormat(res, val){
     }
     res.format({
       'application/xml': function () {
-        res.status(200).send(js2xml.json_to_xml(msg))
+        res.status(200).send(js2xml.json_to_xml(msg, isCompute))
       },
       
       'application/json': function () {
@@ -176,7 +178,7 @@ function returnFormat(res, val){
       },
       
       'application/rdf': function () {
-        res.status(200).send(js2rdf.json_to_rdf(msg))
+          res.status(200).send(js2rdf.json_to_rdf(msg, isCompute))
       },
       
       default: function () {
