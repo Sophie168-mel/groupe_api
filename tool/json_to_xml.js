@@ -25,10 +25,8 @@ exports.json_to_xml = function (json_to_convert, isCompute = false) {
   var myXml = '<?xml version="1.0" encoding="UTF-8"?>\n<auto_stop>';
 
   if (isCompute) {
-    for (key of clefs) {
-        var key_value = json_individu[key];
-        res += "\t<" + key + ">" + key_value + "</" + key + ">\n";
-    }
+    myXml += "\n\t<xsd:integer>" + json_to_convert["resultat"] + "</xsd:integer>";
+    
   } else {
     for (ind of json_to_convert) {
       myXml += "\n" + individu_xml(ind);

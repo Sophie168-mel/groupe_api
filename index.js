@@ -18,7 +18,8 @@ function IsRequestHeaderAcceptValid(req) {
   }
 }
 
-app.post("/pouce", function (req, res) { // OK
+app.post("/pouce", function (req, res) {
+  // OK
   if (IsRequestHeaderAcceptValid(req)) {
     var body = req.body;
 
@@ -39,7 +40,7 @@ app.post("/pouce", function (req, res) { // OK
   }
 });
 
-app.get("/pouces", function (req, res) { // FIX BUG: Limit
+app.get("/pouces", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
       message = "Les variables echelle et value ne sont pas définies";
@@ -47,13 +48,8 @@ app.get("/pouces", function (req, res) { // FIX BUG: Limit
     } else {
       var echelle = req.query.echelle.toString();
       var value = req.query.value.toString();
-	  console.log(req.query)
-      if (
-        req.query.hasOwnProperty("limit") &
-        (typeof req.query.limit == "number")
-      ) {
-		  // FIX BUG: Limit non utiliser par la requete.
-        let limit = parseInt(req.query.limit);
+      if (req.query.hasOwnProperty("limit") & !isNaN(req.query.limit)) {
+		let limit = parseInt(req.query.limit);
         database.GetValueWhere(res, collection, echelle, value, limit);
       } else {
         database.GetValueWhere(res, collection, echelle, value);
@@ -91,7 +87,7 @@ app.get("/map", function (req, res) { // OK
   }
 });
 
-app.get("/map/count", function (req, res) { // FIX BUG: xml/rdf
+app.get("/map/count", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
       message = "les variables echelle et value ne sont pas définies";
@@ -106,7 +102,8 @@ app.get("/map/count", function (req, res) { // FIX BUG: xml/rdf
   }
 });
 
-app.get("/map/data", function (req, res) { // OK
+app.get("/map/data", function (req, res) {
+  // OK
   if (IsRequestHeaderAcceptValid(req)) {
     if (req.query.id.toString() == undefined) {
       message = "la variable id n'est pas définie";

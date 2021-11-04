@@ -17,7 +17,7 @@ const db = admin.firestore();
 exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
   const cityRef = db.collection(collection);
-  if (limit>0){
+  if (limit == 0){
     var query = cityRef.where(echelle, '==', valeur)
   } else {
     var query = cityRef.where(echelle, '==', valeur).limit(limit)
@@ -52,7 +52,6 @@ exports.getData = function (res, collection, id){
 // ############ ############ ############ ############ ############ ############ 
 
 exports.GetCountValue = function (res, collection, echelle, valeur){
-
   const cityRef = db.collection(collection);
   var query = cityRef.where(echelle, '==', valeur)
   query.get()
@@ -161,7 +160,7 @@ function returnFormat(res, val){
     let msg;
     let isCompute = false;
     if (typeof val != "object"){
-      msg = [{"resultat":val}];
+      msg = {"resultat":val};
       isCompute = true;
     } else if (Array.isArray(val) != true){
       msg = [val];
@@ -179,12 +178,15 @@ function returnFormat(res, val){
       },
       
       'application/rdf': function () {
-          res.status(200).send(js2rdf.json_to_rdf(msg, isCompute))
+          if(isCompute){
+            res.status(200).send(js2xml.json_to_xml(msg, isCompute))
+          } else {
+            res.status(200).send(js2rdf.json_to_rdf(msg))
+          }
       },
-      
       default: function () {
         // log the request and respond with 406
-        res.status(406).send('No corresponding format')
+        res.status(406).send('ERROR: BAD FORMAT')
       }
     })
   } 

@@ -21,7 +21,7 @@ function individu_rdf(json_individu){
     return res;
 }
 
-exports.json_to_rdf = function (json_to_convert, isCompute=false){
+exports.json_to_rdf = function (json_to_convert){
 
     var myRdf;
     myRdf = '<?xml version="1.0"?>\n\<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n\t\
