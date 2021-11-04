@@ -1,5 +1,7 @@
 const geofire = require("geofire-common");
 const admin = require("firebase-admin");
+const js2rdf = require("./tool/json_to_rdf")
+const js2xml = require("./tool/json_to_xml")
 var serviceAccount = require("./credential.json");
 
 // Connexion à la base de donnée
@@ -14,7 +16,7 @@ const db = admin.firestore();
 
 exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
-  const cityRef = db.collection(res, collection);
+  const cityRef = db.collection(collection);
   if (limit>0){
     var query = cityRef.where(echelle, '==', valeur)
   } else {
@@ -36,7 +38,7 @@ exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
 exports.getData = function (res, collection, id){
 
-   const cityRef = db.collection(res, collection); //"dataGouv_Grenoble"
+   const cityRef = db.collection(collection); //"dataGouv_Grenoble"
    cityRef.doc(id).get()
    .then(doc => {
       returnFormat(res, doc.data())
@@ -51,7 +53,7 @@ exports.getData = function (res, collection, id){
 
 exports.GetCountValue = function (res, collection, echelle, valeur){
 
-  const cityRef = db.collection(res, collection);
+  const cityRef = db.collection(collection);
   var query = cityRef.where(echelle, '==', valeur)
   query.get()
   .then(querySnapshot => {
@@ -66,7 +68,7 @@ exports.GetCountValue = function (res, collection, echelle, valeur){
 // ############ ############ ############ ############ ############ ############ 
 
 exports.AddPoint = function (res, collection, data){
-  const cityRef = db.collection(res, collection);
+  const cityRef = db.collection(collection);
   cityRef.doc().set(data).then(()=> {
     returnFormat(res, "SUCCESS");
   }).catch(err=>{
@@ -83,7 +85,7 @@ exports.getArround = function (res, collection, center, rayon){
   var bounds = geofire.geohashQueryBounds(center, radiusInM);
   var promises = [];
   for (const b of bounds) {
-    const q = db.collection(res, collection)
+    const q = db.collection(collection)
     .orderBy('geohash')
     .startAt(b[0])
     .endAt(b[1]);
@@ -98,7 +100,7 @@ exports.getArround = function (res, collection, center, rayon){
         const lat = doc.get('Latitude');
         const lng = doc.get('Longitude');
         if(lat != undefined & lng != undefined){
-          const distanceInKm = geofire.distanceBetween([parseInt(lat), parseInt(lng)], center);
+          const distanceInKm = geofire.distanceBetween([parseFloat(lat), parseFloat(lng)], center);
           const distanceInM = distanceInKm * 1000;
           if (distanceInM <= radiusInM) {
             matchingDocs.push(doc);
@@ -121,20 +123,21 @@ exports.getArround = function (res, collection, center, rayon){
 // ############ ############  Tool:Update to geo data  ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
-function updateToGeoData(res, collection){
+function updateToGeoData(collection){
   /**
    * Update value of API, with geohash for geo request.
    * Value:
    *  coollection - str : Name of collection concerned
    * Return: Nothing
    */
-  var cityRef = db.collection(res, collection);
+  console.log(collection)
+  var cityRef = db.collection(collection);
   cityRef.get()
   .then(querySnapshot => {
     querySnapshot.docs.map(doc => { 
       let d = doc.data()
       let target = doc.id
-      let hash = geofire.geohashForLocation([parseInt(d["Latitude"]), parseInt(d["Longitude"])]);
+      let hash = geofire.geohashForLocation([parseFloat(d["Latitude"]), parseFloat(d["Longitude"])]);
       cityRef.doc(target).update({
         geohash: hash,
       }).then(() => {
@@ -164,7 +167,7 @@ function returnFormat(res, val){
     }
     res.format({
       'application/xml': function () {
-        res.status(200).send(msg)
+        res.status(200).send(js2xml.json_to_xml(msg))
       },
       
       'application/json': function () {
@@ -172,7 +175,7 @@ function returnFormat(res, val){
       },
       
       'application/rdf': function () {
-        res.status(200).send(msg)
+        res.status(200).send(js2rdf.json_to_rdf(msg))
       },
       
       default: function () {
@@ -205,7 +208,6 @@ if (test == true){
   
   id = "1861" // en str uniquement !
   getData(res, collection, id)
-  
   
   data = {
     "Latitude":"45.271714",
