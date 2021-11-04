@@ -22,6 +22,31 @@ app.get('/map', function(req, res){
 
 });
 
+app.get('/map/data', function(req, res){
+    if (IsRequestHeaderAcceptValid(req)) 
+    {
+        var id = req.query.zoom.toString();
+        
+        
+        var message=""
+        if (parseInt(id)%1!=0) 
+        {
+            message="id is not valid"
+            res.status(406).send("ERROR:"+message)          
+                
+        }
+        else {
+            database.getData(res, collection, id)
+            
+        }
+    }
+    else
+    {
+             res.status(406).send("Header Accept not acceptable");
+        }
+
+});
+
 app.get('/map/count', function(req, res){
     if (IsRequestHeaderAcceptValid(req)) 
     {
