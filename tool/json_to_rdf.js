@@ -1,23 +1,6 @@
 // https://www.w3.org/2003/01/geo/
 // https://www.w3.org/wiki/GeoRDF
 // https://www.w3.org/RDF/Validator/
-const { json } = require('express');
-const myJson = require('./miserables.json');
-/*
-myJson :
-    ► nodes 
-        • id
-        • name
-        • group
-    ► links
-        • source
-        • target
-        • value
-*/
-
-// Je travail sur nodes : myJson_nodes
-myJson_point = myJson["point"];
-
 
 
 function individu_rdf(json_individu){
@@ -38,7 +21,7 @@ function individu_rdf(json_individu){
     return res;
 }
 
-function json_to_rdf(json_to_convert){
+exports.json_to_rdf = function (json_to_convert){
 
     var myRdf;
     myRdf = '<?xml version="1.0"?>\n\<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"\n\t\
@@ -53,5 +36,23 @@ function json_to_rdf(json_to_convert){
     return myRdf;
 }
 
-test = json_to_rdf(myJson_point)
-console.log(test)
+var test = false
+if (test == true){
+    const myJson = require('../miserables.json');
+    /*
+    myJson :
+        ► nodes 
+            • id
+            • name
+            • group
+        ► links
+            • source
+            • target
+            • value
+    */
+
+    // Je travail sur nodes : myJson_nodes
+    myJson_point = myJson["point"];
+    test = json_to_rdf(myJson_point)
+    console.log(test)
+}

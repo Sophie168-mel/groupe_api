@@ -1,18 +1,3 @@
-const myJson = require('./miserables.json');
-/*
-myJson :
-    ► nodes 
-        • id
-        • name
-        • group
-    ► links
-        • source
-        • target
-        • value
-*/
-
-// Je travail sur nodes : myJson_nodes
-myJson_point = myJson["point"];
 
 // Fonction pour faire un string correspondant au format xml à partir d'un individu json
 
@@ -34,7 +19,7 @@ function individu_xml(json_individu){
     return res;
 }
 
-function json_to_xml(json_to_convert){
+exports.json_to_xml = function (json_to_convert){
     ///////////////////////////////////////////////////////////////////////////////
     // Convertit un json avec une classe contenant des enfant sans enfants en xml//
     ///////////////////////////////////////////////////////////////////////////////
@@ -48,5 +33,24 @@ function json_to_xml(json_to_convert){
     return myXml;
 }
 
-test = json_to_xml(myJson_point)
-console.log(test)
+var test = false
+if (test == true){
+    const myJson = require('../miserables.json');
+    /*
+    myJson :
+        ► nodes 
+            • id
+            • name
+            • group
+        ► links
+            • source
+            • target
+            • value
+    */
+
+    // Je travail sur nodes : myJson_nodes
+    myJson_point = myJson["point"];
+    test = json_to_xml(myJson_point)
+    console.log(test)
+}
+
