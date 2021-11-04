@@ -1,10 +1,16 @@
 # groupe_api
 
-Collaborateur:
-- MEUTER Romain
+
+
 
 # Contexte
 # Données
 # Outils
-# Noms des participants
+# Noms des paricipants
+- MEUTER Romain
+- NOUKELA Gilles
+- NGOTALA Sophie
+- PAILHAS Thierry
+- CHIKAHOUI Justin
+
 
