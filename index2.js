@@ -21,3 +21,28 @@ app.get('/map', function(req, res){
     }
 
 });
+
+app.get('/map/count', function(req, res){
+    if (IsRequestHeaderAcceptValid(req)) 
+    {
+        var zoom = req.query.zoom;
+        var value = req.query.value.toString();
+        
+        var message=""
+        if ((zoom != "code_departement" | zoom != "ID territoire" | zoom != "code_region")) 
+        {
+            message="  Variable zoom non definie et\/ou non valorisée dans l\'URL. Valeurs possibles: ID territoire ou code_departement ou code_region"
+            res.status(406).send("ERROR:"+message)          
+                
+        }
+        else {
+            database.GetCountValue(res, collection, zoom, valeur)
+            
+        }
+    }
+    else
+    {
+             res.status(406).send("Header Accept not acceptable");
+        }
+
+});
