@@ -13,7 +13,7 @@ const collection = "dataGouv_Grenoble"
 app.use(express.json());
 
 function IsRequestHeaderAcceptValid(req) {
-	if (req.accepts(['application/json','application/xml','application/rdf\+xml']))
+	if (req.accepts(['application/json','application/xml','application/rdf']))
         {
                  return 1;
         }
@@ -23,47 +23,27 @@ function IsRequestHeaderAcceptValid(req) {
         }
 }
 
-app.get('/pouces', function(req, res){
-	if (IsRequestHeaderAcceptValid(req)) 
-	{
-		var zoom = req.query.zoom;
-		var value = req.query.value.toString();
-		if ((zoom == "code_departement" | zoom == "ID territoire" | zoom == "code_region")) 
-		{
-     			var center = [45.140195, 5.673187];
-     			var rayon = 50 // en km
-     			database.getArround(res, collection, center, rayon)
-     			//database.GetValueWhere(res, collection, db, zoom, value)
-  		}
-		else {
-	  		res.send("Variable zoom non definie et\/ou non valorisée dans l\'URL. Valeurs possibles: code_commune ou code_departement ou code_region");
-		}
-	}
-	else
-	{
-       		 res.status(406).send("Header Accept not acceptable");
+app.get('/map', function(req, res){
+    if (IsRequestHeaderAcceptValid(req)) 
+    {
+        var center = req.query.center.toString().split(",");
+        var rayon = parseFloat(req.query.rayon.toString());
+        var centerArr=center.map(Number);
+        var message=""
+        if(!Array.isArray(centerArr) | centerArr.length != 2){
+            message = "Variable centre n'est pas bien définie, exemple : 45.140195,5.673187"
+            res.status(406).send("ERROR:"+message)
         }
-
-});
-
-app.post('/pouce', function(req, res) {
-        if (IsRequestHeaderAcceptValid(req))
-        {
-			var body = req.body;
-
-			if (body.hasOwnProperty('Latitude') & body.hasOwnProperty('Longitude') & body.hasOwnProperty('ID territoire')) 
-			{
-				database.AddPoint(res,collection, body);
-                        	//res.status(201).send("Insertion OK");
-
-			}
-			else
-				res.status(400).send("Latitude ou Longitude ou ID territoire absente des données JSON");
+        else if(rayon < 1){
+            message = "Le rayon est inférieur à 1 km"
+            res.status(406).send("ERROR:"+message)
         }
-        else
-        {
-                 res.status(406).send("Header Accept not acceptable");
+        else {
+            database.getArround(res, collection, centerArr, rayon)
         }
+    } else {
+        res.status(406).send("Header Accept not acceptable");
+    }
 
 });
 
