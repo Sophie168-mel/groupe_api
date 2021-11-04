@@ -7,7 +7,7 @@ const database = require("./database.js");
 const app = express();
 const PORT = process.env.PORT || 3000 ;
 const collection = "dataGouv_Grenoble"
-
+const json_schema = require("./tutor-schema.json");
 
 // Middleware
 app.use(express.json());
@@ -46,19 +46,43 @@ app.get('/pouces', function(req, res){
 
 });
 
+function IsJsonRequestBody(res,data)
+{
+	const Ajv = require("ajv");
+	const ajv = new Ajv({allErrors: true});
+        const schema = {
+                        type: "object",
+                        properties: {
+                                        "Latitude": {type: "string"},
+                                        "Longitude": {type: "string"},
+                                        "ID territoire": {type: "string"}
+                                    },
+                        required: ["Latitude","Longitude","ID territoire"],
+                        additionalProperties: false
+                        };
+
+        const valid = ajv.validate(schema, data);
+        if (!valid) 
+		return ajv.errors;
+        else
+                return null; //res.send("no errorrs");
+
+}
+
 app.post('/pouce', function(req, res) {
         if (IsRequestHeaderAcceptValid(req))
         {
 			var body = req.body;
-
-			if (body.hasOwnProperty('Latitude') & body.hasOwnProperty('Longitude') & body.hasOwnProperty('ID territoire')) 
+			var valid = IsJsonRequestBody(res,body);
+        		
+			if (valid == null)
 			{
 				database.AddPoint(res,collection, body);
                         	//res.status(201).send("Insertion OK");
 
 			}
 			else
-				res.status(400).send("Latitude ou Longitude ou ID territoire absente des données JSON");
+				res.status(400).send(valid);
         }
         else
         {
