@@ -38,42 +38,39 @@ app.get('/map', function(req, res){
 
 
 
-app.get('/map/count', function(req, res){
-    if (IsRequestHeaderAcceptValid(req)) 
-    {
+app.get("/map/count", function (req, res) {
+  if (IsRequestHeaderAcceptValid(req)) {
 
+    if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
+      
+      message = "les variables echelle et value ne sont pas définies";
+      res.status(406).send("ERROR:" + message);
 
-
-        if(req.query.zoom == undefined | req.query.value == undefined){
-             message = "les variables zoom et value ne sont pas définies"
-            res.status(406).send("ERROR:"+message)
-
-        }else{
-        var zoom = req.query.zoom.toString();
-        var value = req.query.value.toString();
-        
-        var message=""
-       
-        database.GetCountValue(res, collection, zoom, valeur)
-            
-            
-        }
+    } else {
+      var echelle = req.query.echelle.toString();
+      var value = req.query.value.toString();
+      database.GetCountValue(res, collection, echelle, value);
     }
-    else
-    {
-             res.status(406).send("Header Accept not acceptable");
-        }
-
+  } else {
+    res.status(406).send("Header Accept not acceptable");
+  }
 });
+
 
 app.get('/map/data', function(req, res){
     if (IsRequestHeaderAcceptValid(req)) 
     {
-        var id = req.query.zoom.toString();
         
+        if(req.query.id.toString() == undefined) {
+      
+        message = "la variable id n'est pas définie";
+        res.status(406).send("ERROR:" + message);
+
+        }
+        else{
+        var id = req.query.id.toString();
         
-        var message=""
-        if (parseInt(id)%1!=0) 
+                if (parseInt(id)%1!=0) 
         {
             message="id is not valid"
             res.status(406).send("ERROR:"+message)          
@@ -82,6 +79,7 @@ app.get('/map/data', function(req, res){
         else {
             database.getData(res, collection, id)
             
+            }
         }
     }
     else
