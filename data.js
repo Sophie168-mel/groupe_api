@@ -1,7 +1,68 @@
 var fetch = require("node-fetch");
+var LocalStorage = require('node-localstorage').LocalStorage,
+localStorage = new LocalStorage('./scratch');
 
-fetch()
+// conversion d'un csv en json
+function csv_to_json(csv){
+    var lines=csv.split("\n");
+    var result = [];
+    var headers=lines[0].split(",");
+  
+    for(var i=1;i<lines.length;i++){
+  
+        var obj = {};
+        var currentline=lines[i].split(",");
+  
+        for(var j=0;j<headers.length;j++){
+            obj[headers[j]] = currentline[j];
+        }
+  
+        result.push(obj);
+    }
+    return result; //JSON
+  }
 
+// on récupére toute la donnée venant de data.gouv
+var url_commune = "https://www.data.gouv.fr/fr/datasets/r/dbe8a621-a9c4-4bc3-9cae-be1699c5ff25"
+fetch(url_commune)
+    .then(function(response){
+        return response.text()
+    })
+        .then(function(text){
+            localStorage.setItem("data_commune.csv", text)
+        })
+
+// On transforme le csv en json
+data_commune_csv = localStorage.getItem("data_commune.csv")
+data_commune_json = csv_to_json(data_commune_csv)
+
+// On récupère tous les codes INSEE
+var cd_insee = [];
+for(ind of data_commune_json){
+    cd_insee.push(ind["code_commune_INSEE"])
+}
+
+// On fetch pour chaque code insee "rezo pouce"
+var stockage_rezoPouce = []
+var i = 1
+for(insee of cd_insee){
+    insee = insee.padStart(5, "0");
+    console.log(i)
+    url_rezoPouce =  "https://www.rezopouce.fr/json/communes/" + insee + "/points-arret"
+    fetch(url_rezoPouce)
+        .then(function(response){
+            return response.text()
+        })
+            .then(function(text){
+                localStorage.setItem("rezoPouce.json", text)
+            })
+            
+
+    individu_rezoPouce = localStorage.getItem("rezoPouce.json")
+    stockage_rezoPouce.push(individu_rezoPouce)
+    i+=1
+    console.log(stockage_rezoPouce)
+}
 
 
 
