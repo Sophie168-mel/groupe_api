@@ -100,7 +100,7 @@ exports.getArround = function (res, collection, center, rayon){
         const lat = doc.get('Latitude');
         const lng = doc.get('Longitude');
         if(lat != undefined & lng != undefined){
-          const distanceInKm = geofire.distanceBetween([parseInt(lat), parseInt(lng)], center);
+          const distanceInKm = geofire.distanceBetween([parseFloat(lat), parseFloat(lng)], center);
           const distanceInM = distanceInKm * 1000;
           if (distanceInM <= radiusInM) {
             matchingDocs.push(doc);
@@ -123,20 +123,21 @@ exports.getArround = function (res, collection, center, rayon){
 // ############ ############  Tool:Update to geo data  ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
-function updateToGeoData(res, collection){
+function updateToGeoData(collection){
   /**
    * Update value of API, with geohash for geo request.
    * Value:
    *  coollection - str : Name of collection concerned
    * Return: Nothing
    */
+  console.log(collection)
   var cityRef = db.collection(collection);
   cityRef.get()
   .then(querySnapshot => {
     querySnapshot.docs.map(doc => { 
       let d = doc.data()
       let target = doc.id
-      let hash = geofire.geohashForLocation([parseInt(d["Latitude"]), parseInt(d["Longitude"])]);
+      let hash = geofire.geohashForLocation([parseFloat(d["Latitude"]), parseFloat(d["Longitude"])]);
       cityRef.doc(target).update({
         geohash: hash,
       }).then(() => {
@@ -190,7 +191,6 @@ function returnFormat(res, val){
 // ############ ############ ############ ############ ############ ############ 
 var test = false;
 
-
 if (test == true){
 
   // Tester sans la valeur res de express js.
@@ -208,7 +208,6 @@ if (test == true){
   
   id = "1861" // en str uniquement !
   getData(res, collection, id)
-  
   
   data = {
     "Latitude":"45.271714",
