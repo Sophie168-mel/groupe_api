@@ -25,22 +25,20 @@ Il se compose de 39201 individus.
 
 ### b. Rezo Pouce API
 "**Rezo Pouce API**" est un jeu de données composé d'un fichier.json par commune récupérable individuellement via l'API de rezo pouce.
+![plot](https://github.com/Sophie168-mel/groupe_api/blob/main/api_rezo_pouce.png?raw=true)
 
 ### c. Mise en commun des deux jeux de données
+La mise en commun de ces deux jeux de données à permis de créer une donnée recensant les points d'auto stop en les métant dans un réseau d'échelles codé et labelisé.
+![plot](https://github.com/Sophie168-mel/groupe_api/blob/main/graph_regroupement_donnees.png)
 
 ## Mise en place de la base de données
-## Mise en place des requêtes nécessaire à l'api
+
+La base de données est [firebase](https://firebase.google.com/). Celle-ci permet de stocker la donnée et la rendre accéssible à notre API.    
+Celle-ci est organiser de telle sorte à permettre d'accéder facilement aux données dont l'API a besoin.   
+Quand elle est interrogé par l'API elle nous renvoie une réponse en JSON.   
+Nous avons pris la décision d'utiliser un stockage à partir d'une base de données car celle-ci nous permet de ne pas ajouter du temps de traitement lors du requétage. De plus elle nous évite d'être dépendant des données récupérer. En effet celle-cio sont hébergé dans notre base de données de tel sorte à toujours pouvoir utiliser l'api si une des données source disparait ou évolue (nouveau nom de varaibles).
+
 ## Création de l'api
+
+
 ## Fonction de formatage des données
-
-# Requetes à l'API
-## Get
-## Post
-
-- MEUTER Romain
-- NOUKELA Gilles
-- NGOTALA Sophie
-- PAILHAS Thierry
-- CHIKAHOUI Justin
-
-
