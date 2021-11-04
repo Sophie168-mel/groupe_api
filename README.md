@@ -6,5 +6,5 @@ Collaborateur:
 # Contexte
 # Données
 # Outils
-# Noms des paricipants
+# Noms des participants
 
