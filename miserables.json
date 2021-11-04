@@ -333,5 +333,25 @@
     {"source":76,"target":62,"value":1},
     {"source":76,"target":48,"value":1},
     {"source":76,"target":58,"value":1}
+  ],
+
+  "point":[
+    {"id":0,"latitude":46.11581, "longitude":5.81598, "commentaire":"Bellegarde Valséo"},
+    {"id":1,"latitude":46.116, "longitude":5.81758, "commentaire":"Bellegarde Lycée"},
+    {"id":2,"latitude":46.14359, "longitude":5.79652, "commentaire":"Châtillon Place Clertan"},
+    {"id":3,"latitude":46.14455, "longitude":5.79916, "commentaire":"Châtillon Centre"},
+    {"id":4,"latitude":46.14136, "longitude":5.79731, "commentaire":"Châtillon Rue de la Poste"},
+    {"id":5,"latitude":46.12618, "longitude":5.80637, "commentaire":"Parc d'Activités des Étournelles"},
+    {"id":6,"latitude":46.13245, "longitude":5.79417, "commentaire":"Étournelles Pôle sportif"},
+    {"id":7,"latitude":46.13301, "longitude":5.79326, "commentaire":"Étournelles Arrêt bus"},
+    {"id":8,"latitude":46.11214, "longitude":5.78368, "commentaire":"Vouvray École"},
+    {"id":9,"latitude":46.11206, "longitude":5.78388, "commentaire":"Vouvray Hôtel Marinet"},
+    {"id":10,"latitude":46.11437, "longitude":5.78311, "commentaire":"Vouvray Hôtel Marinet"},
+    {"id":11,"latitude":46.1145, "longitude":5.78303, "commentaire":"Vouvray Hôtel Marinet"},
+    {"id":12,"latitude":46.12406, "longitude":5.83353, "commentaire":"Lancrans Salle des Fêtes"},
+    {"id":13,"latitude":46.12483, "longitude":5.83457, "commentaire":"Lancrans Église"},
+    {"id":14,"latitude":46.12477, "longitude":5.83384, "commentaire":"Lancrans Église"}
   ]
 }
+
+

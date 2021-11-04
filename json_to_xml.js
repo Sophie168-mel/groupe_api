@@ -12,7 +12,7 @@ myJson :
 */
 
 // Je travail sur nodes : myJson_nodes
-myJson_nodes = myJson["nodes"];
+myJson_point = myJson["point"];
 
 // Fonction pour faire un string correspondant au format xml à partir d'un individu json
 
@@ -40,7 +40,7 @@ function json_to_xml(json_to_convert){
     ///////////////////////////////////////////////////////////////////////////////
 
     var myXml = '<?xml version="1.0" encoding="UTF-8"?>\n<auto_stop>';
-    for(ind of myJson_nodes){
+    for(ind of json_to_convert){
         myXml += '\n'+ individu_xml(ind)
     }
     myXml += '\n</auto_stop>';
@@ -48,5 +48,5 @@ function json_to_xml(json_to_convert){
     return myXml;
 }
 
-test = json_to_xml(myJson_nodes)
+test = json_to_xml(myJson_point)
 console.log(test)

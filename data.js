@@ -1,4 +1,26 @@
 var fetch = require("node-fetch");
+
+fetch()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+var fetch = require("node-fetch");
 var dfd = require("danfojs-node");
 
 var LocalStorage = require('node-localstorage').LocalStorage,
@@ -24,7 +46,7 @@ dfd.read_csv(url_csv)
             urls.push(url)
         }
 
-        /*
+        
         //console.log(urls.slice(0, 100))
         Promise.all(urls.slice(0, 100).map(url =>
             fetch(url).then(resp => 
@@ -41,7 +63,7 @@ dfd.read_csv(url_csv)
             console.log(texts_filtred)
             localStorage.setItem('stockage',texts_filtred)
         })
-        */
+        
 
         for(url of urls.splice(0, 100)){
 
@@ -68,7 +90,7 @@ dfd.read_csv(url_csv)
 
 
 
-/*
+
 var url = "https://www.rezopouce.fr/json/communes/34172/points-arret";
 
 fetch(url)
