@@ -60,11 +60,17 @@ app.get("/map/count", function (req, res) {
 app.get('/map/data', function(req, res){
     if (IsRequestHeaderAcceptValid(req)) 
     {
-        var id = req.query.zoom.toString();
         
+        if(req.query.id.toString() == undefined) {
+      
+        message = "la variable id n'est pas définie";
+        res.status(406).send("ERROR:" + message);
+
+        }
+        else{
+        var id = req.query.id.toString();
         
-        var message=""
-        if (parseInt(id)%1!=0) 
+                if (parseInt(id)%1!=0) 
         {
             message="id is not valid"
             res.status(406).send("ERROR:"+message)          
@@ -73,6 +79,7 @@ app.get('/map/data', function(req, res){
         else {
             database.getData(res, collection, id)
             
+            }
         }
     }
     else
