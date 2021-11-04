@@ -38,33 +38,24 @@ app.get('/map', function(req, res){
 
 
 
-app.get('/map/count', function(req, res){
-    if (IsRequestHeaderAcceptValid(req)) 
-    {
+app.get("/map/count", function (req, res) {
+  if (IsRequestHeaderAcceptValid(req)) {
 
+    if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
+      
+      message = "les variables echelle et value ne sont pas définies";
+      res.status(406).send("ERROR:" + message);
 
-
-        if(req.query.zoom == undefined | req.query.value == undefined){
-             message = "les variables zoom et value ne sont pas définies"
-            res.status(406).send("ERROR:"+message)
-
-        }else{
-        var zoom = req.query.zoom.toString();
-        var value = req.query.value.toString();
-        
-        var message=""
-       
-        database.GetCountValue(res, collection, zoom, valeur)
-            
-            
-        }
+    } else {
+      var echelle = req.query.echelle.toString();
+      var value = req.query.value.toString();
+      database.GetCountValue(res, collection, echelle, value);
     }
-    else
-    {
-             res.status(406).send("Header Accept not acceptable");
-        }
-
+  } else {
+    res.status(406).send("Header Accept not acceptable");
+  }
 });
+
 
 app.get('/map/data', function(req, res){
     if (IsRequestHeaderAcceptValid(req)) 
