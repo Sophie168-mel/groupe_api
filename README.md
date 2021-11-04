@@ -40,5 +40,30 @@ Nous avons pris la décision d'utiliser un stockage à partir d'une base de donn
 
 ## Création de l'api
 
+L'api connait deux type de reqêtes : 
+- **GET**   
+*►* Echelle : renvoie tous les individus à une échelle donnée   
+*ex :*   
+  - Commune
+  - Département
+  - Région
+
+*►* Zone tampon : renvoie tous les individus dans une zone autour d’un point donnée   
+*ex :*
+  - Point + taille zone
+
+- **POST**   
+*►* Add : ajouter d'un point   
+*ex :*
+  - latitude + longitude + ?commentaire
+
+*►* Change : Modifier un individu
+*ex :*
+  - Point
 
 ## Fonction de formatage des données
+### json_to_xml
+Permet de formater la réponse de l'API JSON en XML
+
+### json_to_rdf
+Permet de formater la réponse de l'API JSON en RDF
