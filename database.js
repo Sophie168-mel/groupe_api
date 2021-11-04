@@ -26,7 +26,7 @@ exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
   .then(querySnapshot => {
     let li = new Array();  
     querySnapshot.docs.map(doc => { li.push(doc.data()) });
-    res.status(200).json({"Liste de valeur":li}) 
+    returnFormat(res, li)
   }).catch(err =>{
     res.status(404).send("ERROR: NO DATA");
   })
@@ -168,6 +168,7 @@ function returnFormat(res, val){
     } else {
       msg = val;
     }
+    // FIX BUG: => XML/RDF pour la route : localhost:3000/map/count?echelle=Nom territoire&value=Grésivaudan
     res.format({
       'application/xml': function () {
         res.status(200).send(js2xml.json_to_xml(msg, isCompute))
@@ -213,7 +214,7 @@ if (test == true){
   data = {
     "Latitude":"45.271714",
     "Longitude":"5.271714",
-    "ID territoire":"28",
+    "ID territoire":"28"
   }
   AddPoint(res, collection, data)
   

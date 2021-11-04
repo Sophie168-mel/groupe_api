@@ -1,85 +1,131 @@
 "use strict";
-const express = require('express');
-const dfd = require("danfojs-node");
+const express = require("express");
 
 // Module ajouter pour effectuer les requetes à la base de donnée
 const database = require("./database.js");
 const app = express();
-const PORT = process.env.PORT || 3000 ;
-const collection = "dataGouv_Grenoble"
-
+const PORT = process.env.PORT || 3000;
+const collection = "dataGouv_Grenoble";
 
 // Middleware
 app.use(express.json());
 
 function IsRequestHeaderAcceptValid(req) {
-	if (req.accepts(['application/json','application/xml','application/rdf\+xml']))
-        {
-                 return 1;
-        }
-	else
-	{
-                 return 0;
-        }
+  if (req.accepts(["application/json", "application/xml", "application/rdf"])) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
-app.get('/map', function(req, res){
-	if (IsRequestHeaderAcceptValid(req)) 
-	{
-		var zoom = req.query.zoom;
-		var value = req.query.value.toString();
-		var center = req.query.center.toString().split(",");
-		var rayon = parseFloat(req.query.center.toString());
+app.post("/pouce", function (req, res) { // OK
+  if (IsRequestHeaderAcceptValid(req)) {
+    var body = req.body;
 
-		var centerArr=centerArr.map(Number);
-		var message=""
-
-		if(!centerArr instanceof Array){
-			message="variable centre n'est pas bien définie"
-		}
-		else if(rayon%1==0){
-			message="variable rayon est mal définie"
-		}
-		else if ((zoom != "code_departement" | zoom != "ID territoire" | zoom != "code_region")) 
-		{
-			message="  Variable zoom non definie et\/ou non valorisée dans l\'URL. Valeurs possibles: ID territoire ou code_departement ou code_region"
-			     			
-     			//database.GetValueWhere(res, collection, db, zoom, value)
-  		}
-		else {
-			database.getArround(res, collection, centerArr, rayon)
-			message=" good execution getArround function"	
-	  		res.send(message);
-		}
-	}
-	else
-	{
-       		 res.status(406).send("Header Accept not acceptable");
-        }
-
+    if (
+      body.hasOwnProperty("Latitude") &
+      body.hasOwnProperty("Longitude") &
+      body.hasOwnProperty("ID territoire")
+    ) {
+      database.AddPoint(res, collection, body);
+    } else
+      res
+        .status(400)
+        .send(
+          "Latitude ou Longitude ou ID territoire absente des données JSON"
+        );
+  } else {
+    res.status(406).send("Header Accept not acceptable");
+  }
 });
 
-app.post('/pouce', function(req, res) {
-        if (IsRequestHeaderAcceptValid(req))
-        {
-			var body = req.body;
+app.get("/pouces", function (req, res) { // FIX BUG: Limit
+  if (IsRequestHeaderAcceptValid(req)) {
+    if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
+      message = "Les variables echelle et value ne sont pas définies";
+      res.status(406).send("ERROR:" + message);
+    } else {
+      var echelle = req.query.echelle.toString();
+      var value = req.query.value.toString();
+	  console.log(req.query)
+      if (
+        req.query.hasOwnProperty("limit") &
+        (typeof req.query.limit == "number")
+      ) {
+		  // FIX BUG: Limit non utiliser par la requete.
+        let limit = parseInt(req.query.limit);
+        database.GetValueWhere(res, collection, echelle, value, limit);
+      } else {
+        database.GetValueWhere(res, collection, echelle, value);
+      }
+    }
+  } else {
+    res.status(406).send("Header Accept not acceptable");
+  }
+});
 
-			if (body.hasOwnProperty('Latitude') & body.hasOwnProperty('Longitude') & body.hasOwnProperty('ID territoire')) 
-			{
-				database.AddPoint(res,collection, body);
-                        	//res.status(201).send("Insertion OK");
+app.get("/map", function (req, res) { // OK
+  if (IsRequestHeaderAcceptValid(req)) {
+    if ((req.query.rayon == undefined) | (req.query.center == undefined)) {
+      message = "les variables rayon et center ne sont pas définies";
+      res.status(406).send("ERROR:" + message);
+    } else {
+      var center = req.query.center.toString().split(",");
+      var rayon = parseFloat(req.query.rayon.toString());
+      var centerArr = center.map(Number);
+      var message = "";
 
-			}
-			else
-				res.status(400).send("Latitude ou Longitude ou ID territoire absente des données JSON");
-        }
-        else
-        {
-                 res.status(406).send("Header Accept not acceptable");
-        }
+      if (!Array.isArray(centerArr) | (centerArr.length != 2)) {
+        message =
+          "Variable centre n'est pas bien définie, exemple : 45.140195,5.673187";
+        res.status(406).send("ERROR:" + message);
+      } else if (rayon < 1) {
+        message = "Le rayon est inférieur à 1 km";
+        res.status(406).send("ERROR:" + message);
+      } else {
+        database.getArround(res, collection, centerArr, rayon);
+      }
+    }
+  } else {
+    res.status(406).send("Header Accept not acceptable");
+  }
+});
 
+app.get("/map/count", function (req, res) { // FIX BUG: xml/rdf
+  if (IsRequestHeaderAcceptValid(req)) {
+    if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
+      message = "les variables echelle et value ne sont pas définies";
+      res.status(406).send("ERROR:" + message);
+    } else {
+      var echelle = req.query.echelle.toString();
+      var value = req.query.value.toString();
+      database.GetCountValue(res, collection, echelle, value);
+    }
+  } else {
+    res.status(406).send("Header Accept not acceptable");
+  }
+});
+
+app.get("/map/data", function (req, res) { // OK
+  if (IsRequestHeaderAcceptValid(req)) {
+    if (req.query.id.toString() == undefined) {
+      message = "la variable id n'est pas définie";
+      res.status(406).send("ERROR:" + message);
+    } else {
+      var id = req.query.id.toString();
+
+      if (parseInt(id) % 1 != 0) {
+        message = "id is not valid";
+        res.status(406).send("ERROR:" + message);
+      } else {
+        database.getData(res, collection, id);
+      }
+    }
+  } else {
+    res.status(406).send("Header Accept not acceptable");
+  }
 });
 
 app.listen(PORT, function () {
-  console.log('Serveur lancé sur le port :' + PORT);
+  console.log("Serveur lancé sur le port :" + PORT);
 });
