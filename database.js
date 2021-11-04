@@ -155,12 +155,12 @@ function updateToGeoData(collection){
 // ############ ############ ############ ############ ############ ############ 
 
 function returnFormat(res, val){
-  if (val == "SUCCESS"){
+  if (val == "SUCCESS" ){
     res.status(200).send("OK");
   } else {
     let msg;
-    if(typeof val != "object" ){
-      msg = {"Resultat": val};
+    if (typeof val != "object"){
+      msg = [{"resultat":val}];
     } else if (Array.isArray(val) != true){
       msg = [val];
     } else {
