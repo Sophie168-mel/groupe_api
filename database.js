@@ -14,7 +14,7 @@ const db = admin.firestore();
 
 exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
-  const cityRef = db.collection(collection);
+  const cityRef = db.collection(res, collection);
   if (limit>0){
     var query = cityRef.where(echelle, '==', valeur)
   } else {
@@ -36,10 +36,10 @@ exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
 exports.getData = function (res, collection, id){
 
-   const cityRef = db.collection(collection); //"dataGouv_Grenoble"
+   const cityRef = db.collection(res, collection); //"dataGouv_Grenoble"
    cityRef.doc(id).get()
    .then(doc => {
-     res.status(200).json(doc.data())
+      returnFormat(res, doc.data())
     }).catch(err=>{
       res.status(404)
     })
@@ -51,11 +51,11 @@ exports.getData = function (res, collection, id){
 
 exports.GetCountValue = function (res, collection, echelle, valeur){
 
-  const cityRef = db.collection(collection);
+  const cityRef = db.collection(res, collection);
   var query = cityRef.where(echelle, '==', valeur)
   query.get()
   .then(querySnapshot => {
-    res.status(200).send(querySnapshot.size)
+    returnFormat(res, querySnapshot.size);
   }).catch(err=>{
     res.status(404)
   })
@@ -66,9 +66,9 @@ exports.GetCountValue = function (res, collection, echelle, valeur){
 // ############ ############ ############ ############ ############ ############ 
 
 exports.AddPoint = function (res, collection, data){
-  const cityRef = db.collection(collection);
+  const cityRef = db.collection(res, collection);
   cityRef.doc().set(data).then(()=> {
-    res.send(200)
+    returnFormat(res, "SUCCESS");
   }).catch(err=>{
     res.send(404)
   });
@@ -78,12 +78,12 @@ exports.AddPoint = function (res, collection, data){
 // ############ ############       Research in geo data  ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
-exports.getArround = function getArround(res, collection, center, rayon){
+exports.getArround = function (res, collection, center, rayon){
   var radiusInM = rayon * 1000;
   var bounds = geofire.geohashQueryBounds(center, radiusInM);
   var promises = [];
   for (const b of bounds) {
-    const q = db.collection(collection)
+    const q = db.collection(res, collection)
     .orderBy('geohash')
     .startAt(b[0])
     .endAt(b[1]);
@@ -113,7 +113,7 @@ exports.getArround = function getArround(res, collection, center, rayon){
     matchingDocs.map(doc => {
       li.push(doc.data());
     })
-    res.status(200).json({"Liste of li": li});
+    returnFormat(res, li);
   });
 }
 
@@ -121,14 +121,14 @@ exports.getArround = function getArround(res, collection, center, rayon){
 // ############ ############  Tool:Update to geo data  ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
-function updateToGeoData(collection){
+function updateToGeoData(res, collection){
   /**
    * Update value of API, with geohash for geo request.
    * Value:
    *  coollection - str : Name of collection concerned
    * Return: Nothing
    */
-  var cityRef = db.collection(collection);
+  var cityRef = db.collection(res, collection);
   cityRef.get()
   .then(querySnapshot => {
     querySnapshot.docs.map(doc => { 
@@ -147,20 +147,64 @@ function updateToGeoData(collection){
 }
 
 // ############ ############ ############ ############ ############ ############
-// ############ ############      Test geo data         ############ ############
+// ############ ############  Tool: Adapt to format    ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
+function returnFormat(res, val){
+  if (val == "SUCCESS"){
+    res.status(200);
+  } else {
+    let msg;
+    if(typeof val != "object" ){
+      msg = {"Resultat": val};
+    } else if (Array.isArray(val) != true){
+      msg = [val];
+    } else {
+      msg = val;
+    }
+    res.format({
+      'application/xml': function () {
+        res.status(200).send(msg)
+      },
+      
+      'application/json': function () {
+        res.status(200).send(msg)
+      },
+      
+      'application/rdf': function () {
+        res.status(200).send(msg)
+      },
+      
+      default: function () {
+        // log the request and respond with 406
+        res.status(406).send('No corresponding format')
+      }
+    })
+  } 
+}
 
+// ############ ############ ############ ############ ############ ############
+// ############ ############      Test geo data         ############ ############
+// ############ ############ ############ ############ ############ ############ 
 var test = false;
 
 if (test == true){
+
+  // Tester sans la valeur res de express js.
+  function res(){}
+  res.prototype.send = function(val){
+    console.log(val)
+  }
+  var x = new res()
+  x.send("hello")
+
   const collection = "dataGouv_Grenoble"
 
   collection = "dataGouv_Grenoble"
-  updateToGeoData(collection)
+  updateToGeoData(res, collection)
   
   id = "1861" // en str uniquement !
-  getData(collection, id)
+  getData(res, collection, id)
   
   
   data = {
@@ -168,15 +212,15 @@ if (test == true){
     "Longitude":"5.271714",
     "ID territoire":"28",
   }
-  AddPoint(collection, data)
+  AddPoint(res, collection, data)
   
   
   echelle = 'Nom territoire'
   valeur = "Grésivaudan"
-  GetValueWhere(collection, echelle, valeur, limit=0)
-  GetCountValue(collection, echelle, valeur)
+  GetValueWhere(res, collection, echelle, valeur, limit=0)
+  GetCountValue(res, collection, echelle, valeur)
   
   var center = [45.140195, 5.673187];
   var rayon = 50 // en km
-  getArround(collection, center, rayon)
+  getArround(res, collection, center, rayon)
 }
