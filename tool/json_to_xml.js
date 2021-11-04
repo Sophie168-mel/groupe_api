@@ -35,7 +35,7 @@ exports.json_to_xml = function (json_to_convert){
 
 var test = false
 if (test == true){
-    const myJson = require('../miserables.json');
+    const myJson = require('./miserables.json');
     /*
     myJson :
         ► nodes 
