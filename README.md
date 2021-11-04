@@ -43,23 +43,38 @@ Nous avons pris la décision d'utiliser un stockage à partir d'une base de donn
 L'api connait deux type de reqêtes : 
 - **GET**   
 *►* Echelle : renvoie tous les individus à une échelle donnée   
-*ex :*   
+*ex : http://localhost:3000/map*   
+  - Commune
+  - Département
+  - Région
+  - Toute la map
+
+► Count : compte le nombre de point à une échelle
+*ex : http://localhost:3000/map/count*
   - Commune
   - Département
   - Région
 
 *►* Zone tampon : renvoie tous les individus dans une zone autour d’un point donnée   
-*ex :*
+*ex : http://localhost:3000/map?latitude=4.00&longitude=2.14568&taille=500*
   - Point + taille zone
+
+*►* ID point : renvoie le point en fonciton de son id   
+*ex : http://localhost:3000/map?id=10*
+  - id
+
+*►* Limit : renvoies les x premiers points    
+*ex : http://localhost:3000/pouces?limit=10**
+  -  limit
 
 - **POST**   
 *►* Add : ajouter d'un point   
-*ex :*
+*ex : http://localhost:3000/pouce?latitude=10&longitude=50&id=7895*
   - latitude + longitude + ?commentaire
 
 *►* Change : Modifier un individu
-*ex :*
-  - Point
+*ex :
+  - id
 
 ## Fonction de formatage des données
 ### json_to_xml
