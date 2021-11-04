@@ -41,39 +41,41 @@ Nous avons pris la décision d'utiliser un stockage à partir d'une base de donn
 ## Création de l'api
 
 L'api connait deux type de reqêtes : 
-- **GET**   
-*►* Echelle : renvoie tous les individus à une échelle donnée   
-*ex : http://localhost:3000/map*   
+### **GET**   
+
+> Echelle : renvoie tous les individus à une échelle donnée   
+> *ex : http://localhost:3000/map*   
   - Commune
   - Département
   - Région
   - Toute la map
 
-► Count : compte le nombre de point à une échelle
-*ex : http://localhost:3000/map/count*
+> Count : compte le nombre de point à une échelle
+> *ex : http://localhost:3000/map/count*
   - Commune
   - Département
   - Région
 
-*►* Zone tampon : renvoie tous les individus dans une zone autour d’un point donnée   
-*ex : http://localhost:3000/map?latitude=4.00&longitude=2.14568&taille=500*
+> Zone tampon : renvoie tous les individus dans une zone autour d’un point donnée   
+> *ex : http://localhost:3000/map?latitude=4.00&longitude=2.14568&taille=500*
   - Point + taille zone
 
-*►* ID point : renvoie le point en fonciton de son id   
-*ex : http://localhost:3000/map?id=10*
+> ID point : renvoie le point en fonciton de son id   
+> *ex : http://localhost:3000/map?id=10*
   - id
 
-*►* Limit : renvoies les x premiers points    
-*ex : http://localhost:3000/pouces?limit=10**
+> Limit : renvoies les x premiers points    
+> *ex : http://localhost:3000/pouces?limit=10**
   -  limit
 
-- **POST**   
-*►* Add : ajouter d'un point   
-*ex : http://localhost:3000/pouce?latitude=10&longitude=50&id=7895*
+### **POST**   
+
+> Add : ajouter d'un point   
+> *ex : http://localhost:3000/pouce?latitude=10&longitude=50&id=7895*
   - latitude + longitude + ?commentaire
 
-*►* Change : Modifier un individu
-*ex :
+> Change : Modifier un individu   
+> *ex :
   - id
 
 ## Fonction de formatage des données
