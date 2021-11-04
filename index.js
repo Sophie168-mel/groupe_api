@@ -7,7 +7,6 @@ const database = require("./database.js");
 const app = express();
 const PORT = process.env.PORT || 3000 ;
 const collection = "dataGouv_Grenoble"
-const json_schema = require("./tutor-schema.json");
 
 // Middleware
 app.use(express.json());
@@ -25,18 +24,17 @@ function IsRequestHeaderAcceptValid(req) {
 
 app.get('/pouces', function(req, res){
 	if (IsRequestHeaderAcceptValid(req)) 
-	{
+	{	
 		var zoom = req.query.zoom;
-		var value = req.query.value.toString();
+		//var value = req.query.value.toString();
 		if ((zoom == "code_departement" | zoom == "ID territoire" | zoom == "code_region")) 
 		{
-     			var center = [45.140195, 5.673187];
-     			var rayon = 50 // en km
-     			database.getArround(res, collection, center, rayon)
-     			//database.GetValueWhere(res, collection, db, zoom, value)
+     			var echelle = 'Nom territoire'
+  			var valeur = "Grésivaudan"
+     			database.GetValueWhere(res, collection, echelle, valeur)
   		}
 		else {
-	  		res.send("Variable zoom non definie et\/ou non valorisée dans l\'URL. Valeurs possibles: code_commune ou code_departement ou code_region");
+	  		res.status(406).send("Variable echelle non definie et\/ou non valorisée dans l\'URL. Valeurs possibles: 'Nom territoire'");
 		}
 	}
 	else
