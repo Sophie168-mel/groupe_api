@@ -49,7 +49,7 @@ L'api connait deux type de requêtes :
   - rayon
 
 > Count : compte le nombre de point à une échelle donné
-> *ex : http://localhost:3000/map/count?echelle='Nom territoire'&value='Grésivaudan'*
+> *ex : http://localhost:3000/map/count?echelle="Nom territoire"&value="Grésivaudan"*
   - Commune
   - Département
   - Région
