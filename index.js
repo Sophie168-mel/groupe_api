@@ -161,7 +161,7 @@ app.get("/map/data", function (req, res) {
 });
 
 app.get("*", function(req, res){
-    res.status(200).send("Vous pouvez vous documentez via notre route :/api-docs")
+    res.status(200).send("Vous pouvez vous documenter via notre route :/api-docs")
 })
 
 app.listen(PORT, function () {
