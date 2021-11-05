@@ -68,10 +68,6 @@ L'api connait deux type de requêtes :
 > *ex : http://localhost:3000/pouce?latitude=10&longitude=50&id=7895*
   - latitude + longitude + ?commentaire
 
-> Change : Modifier un individu   
-> *ex :
-  - id
-
 ## Fonction de formatage des données
 ### json_to_xml
 Permet de formater la réponse de l'API JSON en XML
