@@ -44,8 +44,8 @@ L'api connait deux type de requêtes :
 ### **GET**   
 
 > Zone tampon  : renvoie tous les individus dans une zone autour d'un point donné   
-> *ex : http://localhost:3000/map?centre="45.140195,5.673187"&rayon=50*   
-  - centre
+> *ex : http://localhost:3000/map?center=45.140195,5.673187&rayon=50*   
+  - center
   - rayon
 
 > Count : compte le nombre de point à une échelle donné
