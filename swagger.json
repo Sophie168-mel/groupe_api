@@ -2,10 +2,10 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Groupe autostop",
-    "description": "Projet qui vise à renseigner les utilisateurs sur des points d'autostop accessibles",
+    "description": "Projet qui vise à renseigner les utilisateurs sur des points d'autostop accessibles. L'utilisateur a la possibilité de visualiser les données avec différents formats: JSON, XML ou RDF/XML",
     "version": "1.0.0",
     "license": {
-      "name": "MIT",
+      "name": "M.I.T",
       "url": "https://opensource.org/licenses/MIT"
     }
   },
@@ -15,7 +15,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/"
+      "url": "https://groupmiashsm2api.herokuapp.com/"
     }
   ],
   "paths": {
@@ -57,14 +57,6 @@
             "content": {}
           }
         },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ],
         "x-codegen-request-body-name": "body"
       }
     },
@@ -73,7 +65,70 @@
         "tags": [
           "Point"
         ],
-        "summary": "Retourne les emplacements d'autostop dans un rayon précis",
+        "summary": "Retourne les x premiers emplacements",
+        "description": "Renvoie les données aux formats JSON, XML, RDF/XML",
+        "operationId": "limit",
+        "parameters": [
+          {
+            "name": "Limite",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Limite"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "xml": {
+                    "name": "XZY"
+                  },
+                  "items": {
+                    "$ref": "#/components/schemas/Limite"
+                  }
+                }
+              },
+              "application/rdf+xml": {
+                "schema": {
+                  "type": "array",
+                  "xml": {
+                    "name": "XZY"
+                  },
+                  "items": {
+                    "$ref": "#/components/schemas/Limite"
+                  }
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Header Accept not acceptable",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/map": {
+      "get": {
+        "tags": [
+          "Map"
+        ],
+        "summary": "Retourne les emplacements d'autostop dans un rayon autour d'un point déterminé par une latitude et une longitude",
         "description": "Plusieurs autostops peuvent etre retournés dans un rayon définit par sa longitude et sa latitude",
         "operationId": "find_per_ray",
         "parameters": [
@@ -115,6 +170,9 @@
               "application/xml": {
                 "schema": {
                   "type": "array",
+                  "xml": {
+                    "name": "XZY"
+                  },
                   "items": {
                     "$ref": "#/components/schemas/Point"
                   }
@@ -123,6 +181,9 @@
               "application/rdf+xml": {
                 "schema": {
                   "type": "array",
+                  "xml": {
+                    "name": "XZY"
+                  },
                   "items": {
                     "$ref": "#/components/schemas/Point"
                   }
@@ -142,100 +203,7 @@
             "description": "Header Accept not acceptable",
             "content": {}
           }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      }
-    },
-    "/map": {
-      "get": {
-        "tags": [
-          "Map"
-        ],
-        "summary": "Retourne les emplacements d'autostop dans un rayon précis",
-        "description": "Plusieurs autostops peuvent etre retournés dans un rayon définit par sa longitude et sa latitude",
-        "operationId": "findPetsBySatus",
-        "parameters": [
-          {
-            "name": "rayon",
-            "in": "query",
-            "description": "Status values that need to be considered for filter",
-            "required": true,
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Latitude",
-            "in": "query",
-            "description": "Status values that need to be considered for filter",
-            "required": true,
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Longitude",
-            "in": "query",
-            "description": "Status values that need to be considered for filter",
-            "required": true,
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Point"
-                  }
-                }
-              },
-              "application/rdf+xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Point"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Point"
-                  }
-                }
-              }
-            }
-          },
-          "406": {
-            "description": "Header Accept not acceptable",
-            "content": {}
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       }
     },
     "/map/count": {
@@ -250,11 +218,12 @@
           {
             "name": "Granularité",
             "in": "query",
-            "description": "Un département ou une région ou une commune",
+            "description": "Département ou Région ou Commune",
             "required": true,
             "explode": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "Commune"
             }
           },
           {
@@ -264,7 +233,8 @@
             "required": true,
             "explode": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "Montpellier"
             }
           }
         ],
@@ -275,6 +245,9 @@
               "application/xml": {
                 "schema": {
                   "type": "array",
+                  "xml": {
+                    "name": "XZY"
+                  },
                   "items": {
                     "$ref": "#/components/schemas/Map"
                   }
@@ -283,6 +256,9 @@
               "application/rdf+xml": {
                 "schema": {
                   "type": "array",
+                  "xml": {
+                    "name": "XZY"
+                  },
                   "items": {
                     "$ref": "#/components/schemas/Map"
                   }
@@ -302,15 +278,7 @@
             "description": "Header Accept not acceptable",
             "content": {}
           }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       }
     },
     "/map/data": {
@@ -318,18 +286,19 @@
         "tags": [
           "Map"
         ],
-        "summary": "Retourne le nombre de points gps d'arrets d'autostop à partir d'un identifiant de territoire",
+        "summary": "Retourne le nombre de points gps d'arrets d'autostop dans un territoire à partir d'un identifiant de territoire",
         "description": "Plusieurs autostops peuvent etre retournés dans un rayon définit par sa longitude et sa latitude",
-        "operationId": "map/data",
+        "operationId": "map_data",
         "parameters": [
           {
             "name": "Id",
             "in": "query",
-            "description": "Status values that need to be considered for filter",
+            "description": "Identifiant de territoire",
             "required": true,
             "explode": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "example": "34000"
             }
           }
         ],
@@ -340,16 +309,22 @@
               "application/xml": {
                 "schema": {
                   "type": "array",
+                  "xml": {
+                    "name": "XZY"
+                  },
                   "items": {
-                    "$ref": "#/components/schemas/Map"
+                    "$ref": "#/components/schemas/id_territ"
                   }
                 }
               },
               "application/rdf+xml": {
                 "schema": {
                   "type": "array",
+                  "xml": {
+                    "name": "XZY"
+                  },
                   "items": {
-                    "$ref": "#/components/schemas/Map"
+                    "$ref": "#/components/schemas/id_territ"
                   }
                 }
               },
@@ -357,7 +332,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Map"
+                    "$ref": "#/components/schemas/id_territ"
                   }
                 }
               }
@@ -367,15 +342,7 @@
             "description": "Header Accept not acceptable",
             "content": {}
           }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       }
     }
   },
@@ -387,18 +354,27 @@
         ],
         "type": "object",
         "properties": {
-          "Latitude": {
-            "type": "string"
-          },
-          "Longitude": {
-            "type": "string"
-          },
-          "ID Territoire": {
+          "Nom": {
             "type": "string"
           }
         },
         "xml": {
           "name": "Point"
+        }
+      },
+      "Limite": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "Point": {
+            "type": "string",
+            "example": "Lyon-est"
+          }
+        },
+        "xml": {
+          "name": "Limite"
         }
       },
       "Map": {
@@ -407,35 +383,29 @@
         ],
         "type": "object",
         "properties": {
-          "Granularité": {
-            "type": "string"
-          },
-          "Valeur": {
-            "type": "string"
+          "Nombre de points": {
+            "type": "integer",
+            "example": "10"
           }
         },
         "xml": {
           "name": "Map"
         }
-      }
-    },
-    "securitySchemes": {
-      "petstore_auth": {
-        "type": "oauth2",
-        "flows": {
-          "implicit": {
-            "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
-            "scopes": {
-              "write:pets": "modify pets in your account",
-              "read:pets": "read your pets"
-            }
-          }
-        }
       },
-      "api_key": {
-        "type": "apiKey",
-        "name": "api_key",
-        "in": "header"
+      "id_territ": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "Nb_per_territ": {
+            "type": "integer",
+            "example": "50"
+          }
+        },
+        "xml": {
+          "name": "Territoire"
+        }
       }
     }
   }
