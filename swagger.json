@@ -149,7 +149,7 @@
         "tags": [
           "Map"
         ],
-        "summary": "Retourne les emplacements d'autostop dans un rayon autour d'un point déterminé par une latitude et une longitude",
+        "summary": "Retourne tous les points gps des arrets d'autostop dans un rayon donné",
         "description": "Plusieurs autostops peuvent etre retournés dans un rayon définit par sa longitude et sa latitude",
         "operationId": "find_per_ray",
         "parameters": [
@@ -172,8 +172,8 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "integer",
-                "example": "45.140195, 5.673187"
+                "type": "number",
+                "example": "45.140195,5.673187"
               }
             }
           }
