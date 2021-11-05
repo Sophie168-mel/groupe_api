@@ -1,6 +1,6 @@
 const geofire = require("geofire-common");
 const admin = require("firebase-admin");
-var serviceAccount = require("./credential.json");
+var serviceAccount = require("../credential.json");
 
 // Connexion à la base de donnée
 admin.initializeApp({
