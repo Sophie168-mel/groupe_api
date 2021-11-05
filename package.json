@@ -11,7 +11,7 @@
     "API"
   ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "convert-csv-to-json": "^1.3.1",
     "danfojs": "^0.3.3",
