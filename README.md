@@ -34,34 +34,28 @@ La mise en commun de ces deux jeux de données à permis de créer une donnée r
 ## Mise en place de la base de données
 
 La base de données est [firebase](https://firebase.google.com/). Celle-ci permet de stocker la donnée et la rendre accéssible à notre API.    
-Celle-ci est organiser de telle sorte à permettre d'accéder facilement aux données dont l'API a besoin.   
-Quand elle est interrogé par l'API elle nous renvoie une réponse en JSON.   
-Nous avons pris la décision d'utiliser un stockage à partir d'une base de données car celle-ci nous permet de ne pas ajouter du temps de traitement lors du requétage. De plus elle nous évite d'être dépendant des données récupérer. En effet celle-cio sont hébergé dans notre base de données de tel sorte à toujours pouvoir utiliser l'api si une des données source disparait ou évolue (nouveau nom de varaibles).
+Celle-ci est organisée de telle sorte à permettre d'accéder facilement aux données dont l'API a besoin.   
+Quand elle est interrogée par l'API, elle nous renvoie une réponse en JSON.   
+Nous avons pris la décision d'utiliser un stockage à partir d'une base de données car celle-ci nous permet de ne pas ajouter du temps de traitement lors du requêtage. De plus, elle nous évite d'être dépendant des données à récupérer. En effet, celles-ci sont hébergées dans notre base de données de telle sorte à toujours pouvoir utiliser l'api si une des données sources disparait ou évolue (nouveau nom de varaibles).
 
 ## Création de l'api
 
-L'api connait deux type de reqêtes : 
+L'api connait deux type de requêtes : 
 ### **GET**   
 
-> Echelle : renvoie tous les individus à une échelle donnée   
-> *ex : http://localhost:3000/map*   
+> Zone tampon  : renvoie tous les individus dans une zone autour d'un point donné   
+> *ex : http://localhost:3000/map?centre="45.140195,5.673187"&rayon=50*   
+  - centre
+  - rayon
+
+> Count : compte le nombre de point à une échelle donné
+> *ex : http://localhost:3000/map/count?echelle='Nom territoire'&value='Grésivaudan'*
   - Commune
   - Département
   - Région
-  - Toute la map
-
-> Count : compte le nombre de point à une échelle
-> *ex : http://localhost:3000/map/count*
-  - Commune
-  - Département
-  - Région
-
-> Zone tampon : renvoie tous les individus dans une zone autour d’un point donnée   
-> *ex : http://localhost:3000/map?latitude=4.00&longitude=2.14568&taille=500*
-  - Point + taille zone
 
 > ID point : renvoie le point en fonciton de son id   
-> *ex : http://localhost:3000/map?id=10*
+> *ex : http://localhost:3000/map/data?id=1861*
   - id
 
 > Limit : renvoies les x premiers points    
