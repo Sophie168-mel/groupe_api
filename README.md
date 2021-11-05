@@ -8,7 +8,7 @@ Pour cela nous avons divisé le groupe en 4:
 > • Sophie Ngotala Obiang était en charge du formatage des sorties de l'API   
 
 # Etapes de dévelopement
-
+[lien api](https://groupmiashsm2api.herokuapp.com/api-docs)
 ## Récupération des données
 Les deux jeux de données récupérés sont :
 - [communes-departement-region.csv](https://www.data.gouv.fr/fr/datasets/communes-de-france-base-des-codes-postaux/)
