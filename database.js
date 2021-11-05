@@ -127,8 +127,8 @@ exports.getArround = function (res, collection, center, rayon){
     
     for (const snap of snapshots) {
       for (const doc of snap.docs) {
-        const lat = doc.get('Latitude');
-        const lng = doc.get('Longitude');
+        const lat = doc.get('latitude');
+        const lng = doc.get('longitude');
         if(lat != undefined & lng != undefined){
           const distanceInKm = geofire.distanceBetween([parseFloat(lat), parseFloat(lng)], center);
           const distanceInM = distanceInKm * 1000;
@@ -168,7 +168,7 @@ function updateToGeoData(collection){
     querySnapshot.docs.map(doc => { 
       let d = doc.data()
       let target = doc.id
-      let hash = geofire.geohashForLocation([parseFloat(d["Latitude"]), parseFloat(d["Longitude"])]);
+      let hash = geofire.geohashForLocation([parseFloat(d["latitude"]), parseFloat(d["longitude"])]);
       cityRef.doc(target).update({
         geohash: hash,
       }).then(() => {

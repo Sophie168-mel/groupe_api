@@ -5,7 +5,7 @@ const express = require("express");
 const database = require("./database.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
-const collection = "dataGouv_Grenoble";
+const collection = "DataBase";
 
 // Middleware
 app.use(express.json());
@@ -23,9 +23,9 @@ app.post("/pouce", function (req, res) {
   if (IsRequestHeaderAcceptValid(req)) {
     var body = req.body;
     if (
-      body.hasOwnProperty("Latitude") &
-      body.hasOwnProperty("Longitude") &
-      body.hasOwnProperty("ID territoire")
+      body.hasOwnProperty("latitude") &
+      body.hasOwnProperty("longitude") &
+      body.hasOwnProperty("commentaire")
     ) {
       database.AddPoint(res, collection, body);
     } else
