@@ -239,8 +239,8 @@
               "type": "string",
               "enum": [
                 "code_commune",
-                "code_région",
-                "code_département"
+                "code_region",
+                "code_departement"
               ]
             }
           },
