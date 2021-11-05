@@ -151,6 +151,10 @@ app.get("/map/data", function (req, res) {
   }
 });
 
+app.get("*", function(req, res){
+    res.status(200).send("Vous pouvez vous documentez via notre route :/api-doc")
+})
+
 app.listen(PORT, function () {
   console.log("Serveur lancé sur le port :" + PORT);
 });
