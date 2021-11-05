@@ -1,6 +1,6 @@
 # Contexte et répartition des tâches
 
-Notre API a pour objectif de renseigner sur les points de stop possibles à différentes échelles (commune, département, région) selon certains critères.   
+Notre [API](https://groupmiashsm2api.herokuapp.com/api-docs) a pour objectif de renseigner sur les points de stop possibles à différentes échelles (commune, département, région) selon certains critères.   
 Pour cela nous avons divisé le groupe en 4: 
 > • Justin Chikhaoui était en charge de récupérer la donnée   
 > • Romain Meuter était en charge de la mise en place de la base de données (Firebase)   
