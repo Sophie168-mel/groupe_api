@@ -79,9 +79,9 @@ Paramètres:
 
 app.get("/map", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
-	var message = "";
+	
     if ((req.query.rayon == undefined) | (req.query.center == undefined)) {
-      message = "les variables rayon et center ne sont pas définies";
+       let message = "les variables rayon et center ne sont pas définies";
       res.status(406).send("ERROR:" + message);
     } else {
       var center = req.query.center.toString().split(",");
@@ -115,9 +115,9 @@ Parametre:
 
 app.get("/map/count", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
-	  var message = "";
+	 
     if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
-      message = "les variables echelle et value ne sont pas définies";
+      let message = "les variables echelle et value ne sont pas définies";
       res.status(406).send("ERROR:" + message);
     } else {
       var echelle = req.query.echelle.toString();
@@ -141,9 +141,9 @@ Paramètre:
 app.get("/map/data", function (req, res) {
   // OK
   if (IsRequestHeaderAcceptValid(req)) {
-	  var message = "";
+	 
     if (req.query.id.toString() == undefined) {
-      message = "la variable id n'est pas définie";
+      let message = "la variable id n'est pas définie";
       res.status(406).send("ERROR:" + message);
     } else {
       var id = req.query.id.toString();
@@ -161,7 +161,7 @@ app.get("/map/data", function (req, res) {
 });
 
 app.get("*", function(req, res){
-    res.status(200).send("Vous pouvez vous documentez via notre route :/api-doc")
+    res.status(200).send("Vous pouvez vous documentez via notre route :/api-docs")
 })
 
 app.listen(PORT, function () {
