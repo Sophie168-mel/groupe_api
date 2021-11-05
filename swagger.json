@@ -24,22 +24,12 @@
         "tags": [
           "Point"
         ],
-        "summary": "Ajout des coordonnées GPS d'un nouvel emplacement d'autoroute dans la base",
+        "summary": "Ajout des coordonnées GPS d'un nouvel emplacement d'autostop dans la base",
         "operationId": "addPoint",
         "requestBody": {
           "description": "Vérifier que le format de données en entrée est accepté par le serveur",
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Point"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Point"
-              }
-            },
-            "application/rdf+xml": {
               "schema": {
                 "$ref": "#/components/schemas/Point"
               }
@@ -65,18 +55,49 @@
         "tags": [
           "Point"
         ],
-        "summary": "Retourne les x premiers emplacements",
+        "summary": "Retourne les x premiers emplacements pour un territoire en paramètre",
         "description": "Renvoie les données aux formats JSON, XML, RDF/XML",
         "operationId": "limit",
         "parameters": [
           {
-            "name": "Limite",
+            "name": "echelle",
             "in": "query",
             "description": "Status values that need to be considered for filter",
             "required": true,
             "explode": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "code_commune",
+                "code_departement",
+                "code_region"
+              ]
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1033",
+                "1",
+                "84"
+              ]
+            }
+          },
+          {
+            "name": "limite",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "example": 0
             }
           }
         ],
@@ -135,31 +156,25 @@
           {
             "name": "rayon",
             "in": "query",
-            "description": "Status values that need to be considered for filter",
+            "description": "Entrer le rayon",
             "required": true,
             "explode": true,
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
-            "name": "Latitude",
+            "name": "center",
             "in": "query",
-            "description": "Status values that need to be considered for filter",
+            "description": "Entrer la latitude et la longitude",
             "required": true,
             "explode": true,
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Longitude",
-            "in": "query",
-            "description": "Status values that need to be considered for filter",
-            "required": true,
-            "explode": true,
-            "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "example": "45.140195, 5.673187"
+              }
             }
           }
         ],
@@ -174,7 +189,7 @@
                     "name": "XZY"
                   },
                   "items": {
-                    "$ref": "#/components/schemas/Point"
+                    "$ref": "#/components/schemas/Map"
                   }
                 }
               },
@@ -185,7 +200,7 @@
                     "name": "XZY"
                   },
                   "items": {
-                    "$ref": "#/components/schemas/Point"
+                    "$ref": "#/components/schemas/Map"
                   }
                 }
               },
@@ -193,7 +208,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Point"
+                    "$ref": "#/components/schemas/Map"
                   }
                 }
               }
@@ -211,12 +226,11 @@
         "tags": [
           "Map"
         ],
-        "summary": "Retourne le nombre de points gps d'arrets d'autostop dans une échelle donnée",
-        "description": "Renvoie tous les emplacements soit par département, par région ou commune",
+        "summary": "Retourne le nombre de points gps d'arrets d'autostop d'une échelle donnée",
         "operationId": "mapCount",
         "parameters": [
           {
-            "name": "Granularité",
+            "name": "echelle",
             "in": "query",
             "description": "Département ou Région ou Commune",
             "required": true,
@@ -227,14 +241,14 @@
             }
           },
           {
-            "name": "Valeur",
+            "name": "value",
             "in": "query",
             "description": "Status values that need to be considered for filter",
             "required": true,
             "explode": true,
             "schema": {
-              "type": "string",
-              "example": "Montpellier"
+              "type": "integer",
+              "example": 50
             }
           }
         ],
@@ -249,7 +263,7 @@
                     "name": "XZY"
                   },
                   "items": {
-                    "$ref": "#/components/schemas/Map"
+                    "$ref": "#/components/schemas/id_territ"
                   }
                 }
               },
@@ -260,7 +274,7 @@
                     "name": "XZY"
                   },
                   "items": {
-                    "$ref": "#/components/schemas/Map"
+                    "$ref": "#/components/schemas/id_territ"
                   }
                 }
               },
@@ -268,7 +282,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Map"
+                    "$ref": "#/components/schemas/id_territ"
                   }
                 }
               }
@@ -286,19 +300,18 @@
         "tags": [
           "Map"
         ],
-        "summary": "Retourne le nombre de points gps d'arrets d'autostop dans un territoire à partir d'un identifiant de territoire",
-        "description": "Plusieurs autostops peuvent etre retournés dans un rayon définit par sa longitude et sa latitude",
+        "summary": "Retourne la description d'un point d'autostop pour un id donné",
         "operationId": "map_data",
         "parameters": [
           {
-            "name": "Id",
+            "name": "id",
             "in": "query",
             "description": "Identifiant de territoire",
             "required": true,
             "explode": true,
             "schema": {
               "type": "integer",
-              "example": "34000"
+              "example": "0"
             }
           }
         ],
@@ -313,7 +326,7 @@
                     "name": "XZY"
                   },
                   "items": {
-                    "$ref": "#/components/schemas/id_territ"
+                    "$ref": "#/components/schemas/descript"
                   }
                 }
               },
@@ -324,7 +337,7 @@
                     "name": "XZY"
                   },
                   "items": {
-                    "$ref": "#/components/schemas/id_territ"
+                    "$ref": "#/components/schemas/descript"
                   }
                 }
               },
@@ -332,7 +345,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/id_territ"
+                    "$ref": "#/components/schemas/descript"
                   }
                 }
               }
@@ -354,8 +367,17 @@
         ],
         "type": "object",
         "properties": {
-          "Nom": {
-            "type": "string"
+          "latitude": {
+            "type": "number",
+            "example": 1678.475
+          },
+          "longitude": {
+            "type": "number",
+            "example": 2347.8747
+          },
+          "commentaire": {
+            "type": "string",
+            "example": "ajout POI"
           }
         },
         "xml": {
@@ -368,13 +390,53 @@
         ],
         "type": "object",
         "properties": {
-          "Point": {
+          "geohash": {
             "type": "string",
-            "example": "Lyon-est"
+            "example": "u0hnk75h44"
+          },
+          "latitude": {
+            "type": "string",
+            "example": "46.11581"
+          },
+          "nom_commune": {
+            "type": "string",
+            "example": "Bellegarde-sur-Valserine"
+          },
+          "code_region": {
+            "type": "string",
+            "example": "84"
+          },
+          "id": {
+            "type": "string",
+            "example": "0"
+          },
+          "nom_region": {
+            "type": "string",
+            "example": "Auvergne-Rhône-Alpes"
+          },
+          "nom_departement": {
+            "type": "string",
+            "example": "Ain"
+          },
+          "code_commune": {
+            "type": "string",
+            "example": "1033"
+          },
+          "longitude": {
+            "type": "string",
+            "example": "5.81598"
+          },
+          "commentaire": {
+            "type": "string",
+            "example": "Bellegarde Valséo"
+          },
+          "code_departement": {
+            "type": "string",
+            "example": "1"
           }
         },
         "xml": {
-          "name": "Limite"
+          "name": "point"
         }
       },
       "Map": {
@@ -383,9 +445,49 @@
         ],
         "type": "object",
         "properties": {
-          "Nombre de points": {
-            "type": "integer",
-            "example": "10"
+          "longitude": {
+            "type": "string",
+            "example": "5.6347541"
+          },
+          "code_region": {
+            "type": "string",
+            "example": "84"
+          },
+          "id": {
+            "type": "string",
+            "example": "4111"
+          },
+          "nom_commune": {
+            "type": "string",
+            "example": "Saint-Paul-de-Varces"
+          },
+          "commentaire": {
+            "type": "string",
+            "example": "Lourme"
+          },
+          "geohash": {
+            "type": "string",
+            "example": "u0h02hpnek"
+          },
+          "nom_departement": {
+            "type": "string",
+            "example": "Isère"
+          },
+          "nom_region": {
+            "type": "string",
+            "example": "Auvergne-Rhône-Alpes"
+          },
+          "latitude": {
+            "type": "string",
+            "example": "45.0670596"
+          },
+          "code_commune": {
+            "type": "string",
+            "example": "38436"
+          },
+          "code_departement": {
+            "type": "string",
+            "example": "38"
           }
         },
         "xml": {
@@ -404,7 +506,62 @@
           }
         },
         "xml": {
-          "name": "Territoire"
+          "name": "Nombre"
+        }
+      },
+      "descript": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "longitude": {
+            "type": "string",
+            "example": "5.6347541"
+          },
+          "code_region": {
+            "type": "string",
+            "example": "84"
+          },
+          "id": {
+            "type": "string",
+            "example": "4111"
+          },
+          "nom_commune": {
+            "type": "string",
+            "example": "Saint-Paul-de-Varces"
+          },
+          "commentaire": {
+            "type": "string",
+            "example": "Lourme"
+          },
+          "geohash": {
+            "type": "string",
+            "example": "u0h02hpnek"
+          },
+          "nom_departement": {
+            "type": "string",
+            "example": "Isère"
+          },
+          "nom_region": {
+            "type": "string",
+            "example": "Auvergne-Rhône-Alpes"
+          },
+          "latitude": {
+            "type": "string",
+            "example": "45.0670596"
+          },
+          "code_commune": {
+            "type": "string",
+            "example": "38436"
+          },
+          "code_departement": {
+            "type": "string",
+            "example": "38"
+          }
+        },
+        "xml": {
+          "name": "Nombre"
         }
       }
     }
