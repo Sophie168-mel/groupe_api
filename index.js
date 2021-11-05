@@ -142,7 +142,7 @@ app.get("/map/data", function (req, res) {
   // OK
   if (IsRequestHeaderAcceptValid(req)) {
 	 
-    if (req.query.id.toString() == undefined) {
+    if (req.query.id == undefined) {
       let message = "la variable id n'est pas définie";
       res.status(406).send("ERROR:" + message);
     } else {
