@@ -11,7 +11,7 @@ Pour cela nous avons divisé le groupe en 4 :
 
 ## Récupération des données
 Les deux jeux de données récupérés sont :
-- [communes-departement-region.csv](https://www.data.gouv.fr/fr/datasets/communes-de-france-base-des-codes-postaux/)
+- [Fichiers csv: communes-departement-region.csv](https://www.data.gouv.fr/fr/datasets/communes-de-france-base-des-codes-postaux/)
 - [Rezo Pouce API](https://api.rezopouce.fr/)
 
 ### a. communes-departement-region
