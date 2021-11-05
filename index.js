@@ -60,6 +60,16 @@ app.get("/pouces", function (req, res) { // OK
   }
 });
 
+
+/*Description :
+
+Retourne tous les points gps des arrets d'autostop dans un rayon donné
+GET => route: map exemple "http://localhost:3000/map"
+
+Paramètres: 
+- centre: str exemple 45.140195,5.673187
+- rayon: str exemple 50 (en km);*/
+
 app.get("/map", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     if ((req.query.rayon == undefined) | (req.query.center == undefined)) {
@@ -87,6 +97,16 @@ app.get("/map", function (req, res) { // OK
   }
 });
 
+
+/*Description :
+
+retourne le nombre de points gps d'arrets d'autostop d'une echelle donnée
+GET => route: map/count exemple "http://localhost:3000/map/count"
+
+Parametre: 
+- echelle: str exemple  'Nom territoire'
+- valeur: str exemple "Grésivaudan" */
+
 app.get("/map/count", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
@@ -102,6 +122,15 @@ app.get("/map/count", function (req, res) { // OK
   }
 });
 
+
+/*Description :
+
+retourne le nombre de points gps d'arrets d'autostop à partir d'un identifiant donné
+GET => route: map/data exemple "http://localhost:3000/map/data"
+
+Paramètre: 
+- id: str exemple  '1861'
+ */
 app.get("/map/data", function (req, res) {
   // OK
   if (IsRequestHeaderAcceptValid(req)) {
