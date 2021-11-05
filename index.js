@@ -19,7 +19,7 @@ app.use(
 app.use(express.json());
 
 function IsRequestHeaderAcceptValid(req) {
-  if (req.accepts(["application/json", "application/xml", "application/rdf"])) {
+  if (req.accepts(["application/json", "application/xml", "application/rdf+xml"])) {
     return 1;
   } else {
     return 0;

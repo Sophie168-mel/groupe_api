@@ -208,7 +208,7 @@ function returnFormat(res, val){
         res.status(200).send(msg)
       },
       
-      'application/rdf': function () {
+      'application/rdf+xml': function () {
           if(isCompute){
             res.status(200).send(js2xml.json_to_xml(msg, isCompute))
           } else {
