@@ -1,23 +1,442 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "API Autostop",
-      "description": "Projet qui vise à renseigner les points de stop accessible",
-      "license": {
-        "name": "MIT",
-        "url": "https://opensource.org/licenses/MIT"
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Groupe autostop",
+    "description": "Projet qui vise à renseigner les utilisateurs sur des points d'autostop accessibles",
+    "version": "1.0.0",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about our project",
+    "url": "https://github.com/Sophie168-mel/groupe_api/"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/"
+    }
+  ],
+  "paths": {
+    "/pouce": {
+      "post": {
+        "tags": [
+          "Point"
+        ],
+        "summary": "Ajout des coordonnées GPS d'un nouvel emplacement d'autoroute dans la base",
+        "operationId": "addPoint",
+        "requestBody": {
+          "description": "Vérifier que le format de données en entrée est accepté par le serveur",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Point"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Point"
+              }
+            },
+            "application/rdf+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Point"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Insertion OK",
+            "content": {}
+          },
+          "406": {
+            "description": "Header Accept not acceptable",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ],
+        "x-codegen-request-body-name": "body"
       }
     },
-    "host": "localhost:3000",
-    "basePath": "/",
-    "tags": [
-      {
-        "name": "hello world",
-        "description": "API for describe"
+    "/pouces": {
+      "get": {
+        "tags": [
+          "Point"
+        ],
+        "summary": "Retourne les emplacements d'autostop dans un rayon précis",
+        "description": "Plusieurs autostops peuvent etre retournés dans un rayon définit par sa longitude et sa latitude",
+        "operationId": "find_per_ray",
+        "parameters": [
+          {
+            "name": "rayon",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Latitude",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Longitude",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Point"
+                  }
+                }
+              },
+              "application/rdf+xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Point"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Point"
+                  }
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Header Accept not acceptable",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
       }
-    ],
-    "schemes": ["http"],
-    "consumes": ["application/json"],
-    "produces": ["application/json"]
+    },
+    "/map": {
+      "get": {
+        "tags": [
+          "Map"
+        ],
+        "summary": "Retourne les emplacements d'autostop dans un rayon précis",
+        "description": "Plusieurs autostops peuvent etre retournés dans un rayon définit par sa longitude et sa latitude",
+        "operationId": "findPetsBySatus",
+        "parameters": [
+          {
+            "name": "rayon",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Latitude",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Longitude",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Point"
+                  }
+                }
+              },
+              "application/rdf+xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Point"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Point"
+                  }
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Header Accept not acceptable",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    },
+    "/map/count": {
+      "get": {
+        "tags": [
+          "Map"
+        ],
+        "summary": "Retourne le nombre de points gps d'arrets d'autostop dans une échelle donnée",
+        "description": "Renvoie tous les emplacements soit par département, par région ou commune",
+        "operationId": "mapCount",
+        "parameters": [
+          {
+            "name": "Granularité",
+            "in": "query",
+            "description": "Un département ou une région ou une commune",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Valeur",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Map"
+                  }
+                }
+              },
+              "application/rdf+xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Map"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Map"
+                  }
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Header Accept not acceptable",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    },
+    "/map/data": {
+      "get": {
+        "tags": [
+          "Map"
+        ],
+        "summary": "Retourne le nombre de points gps d'arrets d'autostop à partir d'un identifiant de territoire",
+        "description": "Plusieurs autostops peuvent etre retournés dans un rayon définit par sa longitude et sa latitude",
+        "operationId": "map/data",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "description": "Status values that need to be considered for filter",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Map"
+                  }
+                }
+              },
+              "application/rdf+xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Map"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Map"
+                  }
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Header Accept not acceptable",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Point": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "Latitude": {
+            "type": "string"
+          },
+          "Longitude": {
+            "type": "string"
+          },
+          "ID Territoire": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Point"
+        }
+      },
+      "Map": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "Granularité": {
+            "type": "string"
+          },
+          "Valeur": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "Map"
+        }
+      }
+    },
+    "securitySchemes": {
+      "petstore_auth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+            "scopes": {
+              "write:pets": "modify pets in your account",
+              "read:pets": "read your pets"
+            }
+          }
+        }
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
+      }
+    }
+  }
 }
