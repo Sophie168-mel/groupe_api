@@ -2,7 +2,6 @@ const geofire = require("geofire-common");
 const admin = require("firebase-admin");
 const js2rdf = require("./tool/json_to_rdf")
 const js2xml = require("./tool/json_to_xml")
-var serviceAccount = require("./credential.json");
 
 // Connexion à la base de donnée
 admin.initializeApp({
