@@ -251,9 +251,9 @@ if (test == true){
   
   
   echelle = 'Nom territoire'
-  valeur = "Grésivaudan"
-  GetValueWhere(res, collection, echelle, valeur, limit=0)
-  GetCountValue(res, collection, echelle, valeur)
+  value = "Grésivaudan"
+  GetValueWhere(res, collection, echelle, value, limit=0)
+  GetCountValue(res, collection, echelle, value)
   
   var center = [45.140195, 5.673187];
   var rayon = 50 // en km

@@ -22,7 +22,6 @@ app.post("/pouce", function (req, res) {
   // OK
   if (IsRequestHeaderAcceptValid(req)) {
     var body = req.body;
-    console.log(req);
     if (
       body.hasOwnProperty("Latitude") &
       body.hasOwnProperty("Longitude") &
@@ -43,7 +42,7 @@ app.post("/pouce", function (req, res) {
 app.get("/pouces", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
-      message = "Les variables echelle et value ne sont pas définies";
+      let message = "Les variables echelle et value ne sont pas définies";
       res.status(406).send("ERROR:" + message);
     } else {
       var echelle = req.query.echelle.toString();
