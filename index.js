@@ -161,7 +161,7 @@ app.get("/map/data", function (req, res) {
 });
 
 app.get("*", function(req, res){
-    res.status(200).send("Vous pouvez vous documenter via notre route :/api-docs. Attention : via la documentation la génération de requête rdf ne marche pas, il faut le faire manuellement")
+    res.status(200).send("Vous pouvez vous documenter via ce lien: <a href='groupmiashsm2api.herokuapp.com/api-docs'>Documentation</a>")
 })
 
 app.listen(PORT, function () {
