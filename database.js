@@ -1,6 +1,5 @@
 const geofire = require("geofire-common");
 const admin = require("firebase-admin");
-const dfd = require("danfojs");
 const js2rdf = require("./tool/json_to_rdf")
 const js2xml = require("./tool/json_to_xml")
 var serviceAccount = require("./credential.json");
@@ -16,6 +15,7 @@ const db = admin.firestore();
 // ############ ############ ############ ############ ############ ############ 
 
 function updateDatabase(){
+  const dfd = require("danfojs");
   dfd.read_csv("./data.csv") //assumes file is in CWD
   .then(df => {
   
@@ -36,7 +36,7 @@ function updateDatabase(){
   
 }
 
-updateDatabase()
+//updateDatabase()
 
 // ############ ############ ############ ############ ############ ############
 // ############ ############       Get list data       ############ ############

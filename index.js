@@ -22,7 +22,7 @@ app.post("/pouce", function (req, res) {
   // OK
   if (IsRequestHeaderAcceptValid(req)) {
     var body = req.body;
-
+    console.log(req);
     if (
       body.hasOwnProperty("Latitude") &
       body.hasOwnProperty("Longitude") &
