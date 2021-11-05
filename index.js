@@ -6,6 +6,14 @@ const database = require("./database.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const collection = "DataBase";
+const swaggerUi = require("swagger-ui-express"),
+swaggerDocument = require("./swagger.json");
+app.use(
+    // https://blog.cloudboost.io/adding-swagger-to-existing-node-js-project-92a6624b855b
+    '/api-docs',
+    swaggerUi.serve, 
+    swaggerUi.setup(swaggerDocument)
+  );
 
 // Middleware
 app.use(express.json());
