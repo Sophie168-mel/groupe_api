@@ -237,7 +237,11 @@
             "explode": true,
             "schema": {
               "type": "string",
-              "example": "Commune"
+              "enum": [
+                "code_commune",
+                "code_région",
+                "code_département"
+              ]
             }
           },
           {
