@@ -26,6 +26,25 @@ function IsRequestHeaderAcceptValid(req) {
   }
 }
 
+/* Code pour tester si le format JSON passé en body de la requete correspond bien à celui attendu
+function IsJsonRequestBody(res,data) {
+   const Ajv = require("ajv");
+   const ajv = new Ajv({allErrors: true});
+   const schema = {
+   	          type: "object",
+                        properties: {
+                                        "Latitude": {type: "string"},
+                                        "Longitude": {type: "string"},
+                                        "ID territoire": {type: "string"}
+                                    },
+                        required: ["Latitude","Longitude","ID territoire"],
+                        additionalProperties: false
+                   };
+   const valid = ajv.validate(schema, data);
+   if (!valid) return ajv.errors;
+   else return null; //res.send("no errorrs");
+} */
+
 app.post("/pouce", function (req, res) {
   // OK
   if (IsRequestHeaderAcceptValid(req)) {
@@ -89,7 +108,7 @@ app.get("/map", function (req, res) { // OK
       var centerArr = center.map(Number);
 
       if (!Array.isArray(centerArr) | (centerArr.length != 2)) {
-        message =  "Variable centre n'est pas bien définie, exemple : 45.140195,5.673187";
+        message =  "Variable center n'est pas bien définie, exemple : 45.140195,5.673187";
         res.status(406).send("ERROR:" + message);
       } else if (rayon < 1) {
         message = "Le rayon est inférieur à 1 km";
