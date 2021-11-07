@@ -166,13 +166,13 @@
           {
             "name": "center",
             "in": "query",
-            "description": "Entrer la latitude et la longitude",
+            "description": "Entrer la latitude puis la longitude (Système de projection: Lambdert 93). Exemple: 45.140195,5.673187",
             "required": true,
             "explode": true,
             "schema": {
-              "type": "array",
+              "type": "string",
               "items": {
-                "type": "number",
+                "type": "string",
                 "example": "45.140195,5.673187"
               }
             }
