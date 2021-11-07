@@ -1,6 +1,6 @@
 "use strict";
 const express = require("express");
-const swaggerUi = require("swagger-ui-express"),
+const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const database = require("./database.js");
 const Ajv = require("ajv");
@@ -44,6 +44,15 @@ function IsJsonRequestBody(res,data) {
    else return true; 
 } 
 
+/*Description :
+
+Enregistre un nouveau point dans la base de donnée
+POST => route: map exemple "http://localhost:3000/pouce"
+
+Paramètres: 
+- latitude: float exemple 45.140195
+- longitude: float exemple 5.673187;
+- rayon: int exemple 50 (en km);*/
 app.post("/pouce", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     let body = req.body;
@@ -59,6 +68,15 @@ app.post("/pouce", function (req, res) { // OK
   }
 });
 
+/*Description :
+
+Fournit une liste de point selon le département et la valeur du département associés.
+GET => route: map exemple "http://localhost:3000/pouces" (avec un s!)
+
+Parametre: 
+- echelle: str exemple  'code_departement'
+- valeur: str exemple "73" 
+*/
 app.get("/pouces", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
