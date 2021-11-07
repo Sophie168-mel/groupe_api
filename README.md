@@ -1,6 +1,6 @@
 # Contexte et répartition des tâches
 
-Notre [API](https://groupmiashsm2api.herokuapp.com/api-docs) a pour objectif de renseigner sur les points de stop possibles à différentes échelles (commune, département, région) selon certains critères.   
+Notre [API (documentation swagger)](https://groupmiashsm2api.herokuapp.com/api-docs) a pour objectif de renseigner sur les points de stop possibles à différentes échelles (commune, département, région) selon certains critères.   
 Pour cela nous avons divisé le groupe en 4: 
 > • Justin Chikhaoui était en charge de récupérer la donnée   
 > • Romain Meuter était en charge de la mise en place de la base de données (Firebase)   
@@ -8,7 +8,8 @@ Pour cela nous avons divisé le groupe en 4:
 > • Sophie Ngotala Obiang était en charge du formatage des sorties de l'API   
 
 # Etapes de dévelopement
-[lien api](https://groupmiashsm2api.herokuapp.com/api-docs)
+
+Documenation: [API Autostop](https://groupmiashsm2api.herokuapp.com/api-docs)
 ## Récupération des données
 Les deux jeux de données récupérés sont :
 - [communes-departement-region.csv](https://www.data.gouv.fr/fr/datasets/communes-de-france-base-des-codes-postaux/)
@@ -66,7 +67,15 @@ L'api connait deux type de requêtes :
 
 > Add : ajout d'un point d'auto stop
 > *ex : http://localhost:3000/pouce?latitude=10&longitude=50&id=7895*
-  - latitude + longitude + ?commentaire
+  - latitude 
+  - longitude 
+  - code_commune
+  - nom_commune
+  - code_département
+  - nom_departement
+  - code_region
+  - nom_region
+  - commentaire
 
 ## Fonction de formatage des données
 ### json_to_xml
@@ -74,3 +83,11 @@ Permet de formater la réponse de l'API JSON en XML
 
 ### json_to_rdf
 Permet de formater la réponse de l'API JSON en RDF
+
+## Discussion:
+
+
+L'api est encore améliorable:
+- Sur la sécurisation des entrée avec un test de typage et de vérification. Il a déjà été effectué pour la requête post mais peut etre étendu aux autres requêtes.
+- Pour la rapidité de la réponse:
+  Le choix de firebase s'est éffectué selon une stratégie de rapidité car nous connaissions, cependant une autre technologie tel que couchDB pourrai diminuer le temps d'execution des requêtes.

@@ -1,6 +1,6 @@
 var LocalStorage = require('node-localstorage').LocalStorage,
 localStorage = new LocalStorage('./scratch');
-const dfd = require("danfojs-node")
+const dfd = require("danfojs")
 
 function csv_to_json(csv){
     var lines=csv.split("\n");
