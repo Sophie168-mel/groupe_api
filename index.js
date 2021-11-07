@@ -1,7 +1,7 @@
 "use strict";
 const express = require("express");
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json");
+const swaggerUi = require("swagger-ui-express"),
+ swaggerDocument = require("./swagger.json");
 const database = require("./database.js");
 const Ajv = require("ajv");
 
