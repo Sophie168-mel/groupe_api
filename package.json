@@ -24,6 +24,7 @@
     "node-localstorage": "^2.2.1",
     "swagger-ui-express": "^4.1.6",
     "xhr2": "^0.2.1",
-    "danfojs-node": "^0.3.3"
+    "danfojs-node": "^0.3.3",
+    "danfojs": "^0.3.3"
   }
 }
