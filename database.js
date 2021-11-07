@@ -11,6 +11,7 @@ admin.initializeApp({
     private_key: process.env.private_key.replace(/\\n/g, '\n'),
     })
 });
+
 const db = admin.firestore();
 
 // ############ ############ ############ ############ ############ ############
@@ -236,22 +237,22 @@ if (test == true){
   let x = new res()
   x.send("hello")
 
-  collection = "dataGouv_Grenoble"
+  collection = "dataBase"
   updateToGeoData(res, collection)
   
   id = "1861" // en str uniquement !
   getData(res, collection, id)
   
   data = {
-    "Latitude":"45.271714",
-    "Longitude":"5.271714",
-    "ID territoire":"28"
+    "latitude":"45.271714",
+    "longitude":"5.271714",
+    "commentaire":"28"
   }
   AddPoint(res, collection, data)
   
   
-  echelle = 'Nom territoire'
-  value = "Grésivaudan"
+  echelle = 'code_departement'
+  value = "73" // Savoie in my heart !
   GetValueWhere(res, collection, echelle, value, limit=0)
   GetCountValue(res, collection, echelle, value)
   
