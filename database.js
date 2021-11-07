@@ -193,10 +193,11 @@ function returnFormat(res, val){
       isCompute = true;
     } else if (Array.isArray(val) != true){
       msg = [val];
+      msg.forEach(function(v){ delete v.geohash });
     } else {
       msg = val;
+      msg.forEach(function(v){ delete v.geohash });
     }
-    // FIX BUG: => XML/RDF pour la route : localhost:3000/map/count?echelle=Nom territoire&value=Grésivaudan
     res.format({
       'application/xml': function () {
         res.status(200).send(js2xml.json_to_xml(msg, isCompute))
@@ -207,11 +208,7 @@ function returnFormat(res, val){
       },
       
       'application/rdf+xml': function () {
-          if(isCompute){
-            res.status(200).send(js2xml.json_to_xml(msg, isCompute))
-          } else {
-            res.status(200).send(js2rdf.json_to_rdf(msg))
-          }
+        res.status(200).send(js2rdf.json_to_rdf(msg, isCompute))
       },
       default: function () {
         // log the request and respond with 406

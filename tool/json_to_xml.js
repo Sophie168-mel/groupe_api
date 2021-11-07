@@ -22,18 +22,19 @@ exports.json_to_xml = function (json_to_convert, isCompute = false) {
   ///////////////////////////////////////////////////////////////////////////////
   // Convertit un json avec une classe contenant des enfant sans enfants en xml//
   ///////////////////////////////////////////////////////////////////////////////
-  var myXml = '<?xml version="1.0" encoding="UTF-8"?>\n<auto_stop>';
-
+  
   if (isCompute) {
+    var myXml = '<?xml version="1.0" encoding="UTF-8"?>\n<Nombre>';
     myXml += "\n\t<xsd:integer>" + json_to_convert["resultat"] + "</xsd:integer>";
-    
+    myXml += "\n</Nombre>";
   } else {
+    var myXml = '<?xml version="1.0" encoding="UTF-8"?>\n<auto_stop>';
     for (ind of json_to_convert) {
       myXml += "\n" + individu_xml(ind);
     }
+    myXml += "\n</auto_stop>";
   }
 
-  myXml += "\n</auto_stop>";
 
   return myXml;
 };
