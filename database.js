@@ -3,6 +3,7 @@ const admin = require("firebase-admin");
 const js2rdf = require("./tool/json_to_rdf")
 const js2xml = require("./tool/json_to_xml")
 
+
 // Connexion à la base de donnée
 admin.initializeApp({
   credential: admin.credential.cert({
@@ -97,6 +98,7 @@ exports.GetCountValue = function (res, collection, echelle, valeur){
 
 exports.AddPoint = function (res, collection, data){
   let cityRef = db.collection(collection);
+  data["geohash"] = geofire.geohashForLocation([parseFloat(data["latitude"]), parseFloat(data["longitude"])]);
   cityRef.doc().set(data).then(()=> {
     returnFormat(res, "SUCCESS");
   }).catch(err=>{

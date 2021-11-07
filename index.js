@@ -32,11 +32,17 @@ function IsJsonRequestBody(res,data) {
    const schema = {
     type: "object",
     properties: {
-                    "latitude": {type: "string"},
-                    "longitude": {type: "string"},
+                    "latitude": {type: "number"},
+                    "longitude": {type: "number"},
+                    "code_departement": {type: "number"},
+                    "code_commune": {type: "number"},
+                    "code_region": {type: "number"},
+                    "nom_commune": {type: "string"},
+                    "nom_departement": {type: "string"},
+                    "nom_region": {type: "string"},
                     "commentaire": {type: "string"}
                 },
-    required: ["latitude","longitude","commentaire"],
+    required: ["latitude","longitude","commentaire", "code_departement","code_commune","code_region", "nom_commune", "nom_departement", "nom_region" ],
     additionalProperties: false
     };
    const valid = ajv.validate(schema, data);
@@ -56,7 +62,6 @@ Paramètres:
 app.post("/pouce", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     let body = req.body;
-    console.log(body);
     let configInputData = IsJsonRequestBody(res,body);
     if ( IsJsonRequestBody(res,body) == true ) {
       database.AddPoint(res, collection, body);

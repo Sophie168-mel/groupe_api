@@ -373,15 +373,39 @@
         "properties": {
           "latitude": {
             "type": "number",
-            "example": 1678.475
+            "example": 46.11581
           },
           "longitude": {
             "type": "number",
-            "example": 2347.8747
+            "example": 5.81598
           },
           "commentaire": {
             "type": "string",
             "example": "ajout POI"
+          },
+          "code_commune": {
+            "type": "number",
+            "example": 73000
+          },
+          "nom_commune": {
+            "type": "string",
+            "example": "Chambéry"
+          },
+          "code_departement": {
+            "type": "number",
+            "example": 73
+          },
+          "nom_departement": {
+            "type": "string",
+            "example": "Savoie"
+          },
+          "code_region": {
+            "type": "number",
+            "example": 84
+          },
+          "nom_region": {
+            "type": "string",
+            "example": "Auvergne-Rhône-Alpes"
           }
         },
         "xml": {
