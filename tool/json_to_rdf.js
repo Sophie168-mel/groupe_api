@@ -16,10 +16,29 @@ function individu_rdf(json_individu){
     res += '\t<geo:lat>' + json_individu['latitude'] + '</geo:lat>\n'
     res += '\t<geo:long>' + json_individu['longitude'] + '</geo:long>\n'
     res += '\t<rdf:comment>' + json_individu['commentaire'] + '</rdf:comment>\n'
+    res += '\t<igeo:Region>\n'
+    res += '\t\t<igeo:nom xml:lang="fr">' + json_individu['nom_region'] + '</igeo:nom>\n'
+    res += '\t\t<igeo:code_region>' + json_individu['code_region'] + '</igeo:code_region>\n'
+    res += '\t\t<geo:subdivision>\n'
+    res += '\t\t<igeo:Departement>\n'
+    res += '\t\t\t<igeo:nom xml:lang="fr">' + json_individu['nom_departement'] + '</igeo:nom>\n'
+    res += '\t\t\t<igeo:code_departement>' + json_individu['code_departement'] + '</igeo:code_departement>\n'
+    res += '\t\t</igeo:Departement>\n'
+    res += '\t\t</geo:subdivision>\n'
+    res += '\t\t\t<geo:subdivision>\n'
+    res += '\t\t\t<igeo:Commune>\n'
+    res += '\t\t\t\t<igeo:nom xml:lang="fr">' + json_individu['nom_commune'] + '</igeo:nom>\n'
+    res += '\t\t\t\t<igeo:code_commune>' + json_individu['code_commune'] + '</igeo:code_commune>\n'
+    res += '\t\t\t</igeo:Commune>\n'
+    res += '\t\t\t</geo:subdivision>\n'
+    res += '\t<igeo:Region>\n'
     res += '</geo:Point>';
 
     return res;
 }
+
+
+
 
 exports.json_to_rdf = function (json_to_convert){
 
@@ -36,9 +55,11 @@ exports.json_to_rdf = function (json_to_convert){
     return myRdf;
 }
 
+
+
 var test = false
 if (test == true){
-    const myJson = require('../miserables.json');
+    const myJson = require('./miserables.json');
     /*
     myJson :
         ► nodes 
