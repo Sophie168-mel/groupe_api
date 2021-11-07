@@ -1,15 +1,16 @@
 "use strict";
 const express = require("express");
+const swaggerUi = require("swagger-ui-express"),
+const swaggerDocument = require("./swagger.json");
+const database = require("./database.js");
+const Ajv = require("ajv");
 
 // Module ajouter pour effectuer les requetes à la base de donnée
-const database = require("./database.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const collection = "DataBase";
-const swaggerUi = require("swagger-ui-express"),
-swaggerDocument = require("./swagger.json");
+
 app.use(
-    // https://blog.cloudboost.io/adding-swagger-to-existing-node-js-project-92a6624b855b
     '/api-docs',
     swaggerUi.serve, 
     swaggerUi.setup(swaggerDocument)
@@ -26,54 +27,46 @@ function IsRequestHeaderAcceptValid(req) {
   }
 }
 
-/* Code pour tester si le format JSON passé en body de la requete correspond bien à celui attendu
 function IsJsonRequestBody(res,data) {
-   const Ajv = require("ajv");
    const ajv = new Ajv({allErrors: true});
    const schema = {
-   	          type: "object",
-                        properties: {
-                                        "Latitude": {type: "string"},
-                                        "Longitude": {type: "string"},
-                                        "ID territoire": {type: "string"}
-                                    },
-                        required: ["Latitude","Longitude","ID territoire"],
-                        additionalProperties: false
-                   };
+    type: "object",
+    properties: {
+                    "latitude": {type: "string"},
+                    "longitude": {type: "string"},
+                    "commentaire": {type: "string"}
+                },
+    required: ["latitude","longitude","commentaire"],
+    additionalProperties: false
+    };
    const valid = ajv.validate(schema, data);
    if (!valid) return ajv.errors;
-   else return null; //res.send("no errorrs");
-} */
+   else return true; 
+} 
 
-app.post("/pouce", function (req, res) {
-  // OK
+app.post("/pouce", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
-    var body = req.body;
-    if (
-      body.hasOwnProperty("latitude") &
-      body.hasOwnProperty("longitude") &
-      body.hasOwnProperty("commentaire")
-    ) {
+    let body = req.body;
+    let configInputData = IsJsonRequestBody(res,data);
+    if ( IsJsonRequestBody(res,body) == true ) {
       database.AddPoint(res, collection, body);
     } else
       res
         .status(400)
-        .send(
-          "Latitude ou Longitude ou ID territoire absente des données JSON"
-        );
+        .send(configInputData);
   } else {
-    res.status(406).send("Header Accept not acceptable");
+    res.status(406).send("ERROR: Header not acceptable");
   }
 });
 
 app.get("/pouces", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
-      let message = "Les variables echelle et value ne sont pas définies";
+      let message = "No defined values (echelle, value)";
       res.status(406).send("ERROR:" + message);
     } else {
-      var echelle = req.query.echelle.toString();
-      var value = req.query.value.toString();
+      let echelle = req.query.echelle.toString();
+      let value = req.query.value.toString();
       if (req.query.hasOwnProperty("limit") & !isNaN(req.query.limit)) {
 		let limit = parseInt(req.query.limit);
         database.GetValueWhere(res, collection, echelle, value, limit);
@@ -82,7 +75,7 @@ app.get("/pouces", function (req, res) { // OK
       }
     }
   } else {
-    res.status(406).send("Header Accept not acceptable");
+    res.status(406).send("ERROR: Header not acceptable");
   }
 });
 
@@ -100,25 +93,25 @@ app.get("/map", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
 	
     if ((req.query.rayon == undefined) | (req.query.center == undefined)) {
-       let message = "les variables rayon et center ne sont pas définies";
+       let message = "No defined values (center, rayon)";
       res.status(406).send("ERROR:" + message);
     } else {
-      var center = req.query.center.toString().split(",");
-      var rayon = parseFloat(req.query.rayon.toString());
-      var centerArr = center.map(Number);
+      let center = req.query.center.toString().split(",");
+      let rayon = parseFloat(req.query.rayon.toString());
+      let centerArr = center.map(Number);
 
       if (!Array.isArray(centerArr) | (centerArr.length != 2)) {
-        message =  "Variable center n'est pas bien définie, exemple : 45.140195,5.673187";
+        message =  "Bad value center, example : 45.140195,5.673187";
         res.status(406).send("ERROR:" + message);
       } else if (rayon < 1) {
-        message = "Le rayon est inférieur à 1 km";
+        message = "Rayon less 1 km";
         res.status(406).send("ERROR:" + message);
       } else {
         database.getArround(res, collection, centerArr, rayon);
       }
     }
   } else {
-    res.status(406).send("Header Accept not acceptable");
+    res.status(406).send("ERROR: Header not acceptable");
   }
 });
 
@@ -136,15 +129,15 @@ app.get("/map/count", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
 	 
     if ((req.query.echelle == undefined) | (req.query.value == undefined)) {
-      let message = "les variables echelle et value ne sont pas définies";
+      let message = "No defined values (echelle, value)";
       res.status(406).send("ERROR:" + message);
     } else {
-      var echelle = req.query.echelle.toString();
-      var value = req.query.value.toString();
+      let echelle = req.query.echelle.toString();
+      let value = req.query.value.toString();
       database.GetCountValue(res, collection, echelle, value);
     }
   } else {
-    res.status(406).send("Header Accept not acceptable");
+    res.status(406).send("ERROR: Header not acceptable");
   }
 });
 
@@ -162,25 +155,24 @@ app.get("/map/data", function (req, res) {
   if (IsRequestHeaderAcceptValid(req)) {
 	 
     if (req.query.id == undefined) {
-      let message = "la variable id n'est pas définie";
+      let message = "No defined value";
       res.status(406).send("ERROR:" + message);
     } else {
-      var id = req.query.id.toString();
-
+      let id = req.query.id.toString();
       if (parseInt(id) % 1 != 0) {
-        message = "id is not valid";
+        message = "ID is not int";
         res.status(406).send("ERROR:" + message);
       } else {
         database.getData(res, collection, id);
       }
     }
   } else {
-    res.status(406).send("Header Accept not acceptable");
+    res.status(406).send("ERROR: Header not acceptable");
   }
 });
 
 app.get("*", function(req, res){
-    res.status(200).send("Vous pouvez vous documenter via ce lien: <a href='groupmiashsm2api.herokuapp.com/api-docs'>Documentation</a>")
+    res.status(200).send("Doc: <a href='/api-docs'>Link</a>")
 })
 
 app.listen(PORT, function () {

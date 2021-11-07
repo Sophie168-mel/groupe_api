@@ -14,18 +14,17 @@ admin.initializeApp({
 const db = admin.firestore();
 
 // ############ ############ ############ ############ ############ ############
-// ############ ############      Add file data         ############ ############
+// ############ ############      Tool file data       ############ ############
 // ############ ############ ############ ############ ############ ############ 
 
 function updateDatabase(){
   const dfd = require("danfojs");
   dfd.read_csv("./data.csv") //assumes file is in CWD
   .then(df => {
-  
     df.head().print()
     let collection = "dataPoint"
     for(d in df){
-      const cityRef = db.collection(collection);
+      let cityRef = db.collection(collection);
       cityRef.doc().set(d).then(()=> {
         console.log("SUCCESS")
       }).catch(err=>{
@@ -35,8 +34,6 @@ function updateDatabase(){
   }).catch(err=>{
      console.log(err);
   })
-
-  
 }
 
 //updateDatabase()
@@ -49,9 +46,9 @@ exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
   const cityRef = db.collection(collection);
   if (limit == 0){
-    var query = cityRef.where(echelle, '==', valeur)
+    let query = cityRef.where(echelle, '==', valeur)
   } else {
-    var query = cityRef.where(echelle, '==', valeur).limit(limit)
+    let query = cityRef.where(echelle, '==', valeur).limit(limit)
   }
   query.get()
   .then(querySnapshot => {
@@ -69,7 +66,7 @@ exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
 exports.getData = function (res, collection, id){
 
-   const cityRef = db.collection(collection); //"dataGouv_Grenoble"
+   let cityRef = db.collection(collection); //"dataGouv_Grenoble"
    cityRef.doc(id).get()
    .then(doc => {
       returnFormat(res, doc.data())
@@ -83,8 +80,8 @@ exports.getData = function (res, collection, id){
 // ############ ############ ############ ############ ############ ############ 
 
 exports.GetCountValue = function (res, collection, echelle, valeur){
-  const cityRef = db.collection(collection);
-  var query = cityRef.where(echelle, '==', valeur)
+  let cityRef = db.collection(collection);
+  let query = cityRef.where(echelle, '==', valeur)
   query.get()
   .then(querySnapshot => {
     returnFormat(res, querySnapshot.size);
@@ -98,7 +95,7 @@ exports.GetCountValue = function (res, collection, echelle, valeur){
 // ############ ############ ############ ############ ############ ############ 
 
 exports.AddPoint = function (res, collection, data){
-  const cityRef = db.collection(collection);
+  let cityRef = db.collection(collection);
   cityRef.doc().set(data).then(()=> {
     returnFormat(res, "SUCCESS");
   }).catch(err=>{
@@ -111,11 +108,11 @@ exports.AddPoint = function (res, collection, data){
 // ############ ############ ############ ############ ############ ############ 
 
 exports.getArround = function (res, collection, center, rayon){
-  var radiusInM = rayon * 1000;
-  var bounds = geofire.geohashQueryBounds(center, radiusInM);
-  var promises = [];
+  let radiusInM = rayon * 1000;
+  let bounds = geofire.geohashQueryBounds(center, radiusInM);
+  let promises = [];
   for (const b of bounds) {
-    const q = db.collection(collection)
+    let q = db.collection(collection)
     .orderBy('geohash')
     .startAt(b[0])
     .endAt(b[1]);
@@ -123,15 +120,15 @@ exports.getArround = function (res, collection, center, rayon){
   }
   
   Promise.all(promises).then((snapshots) => {
-    const matchingDocs = [];
+    let matchingDocs = [];
     
-    for (const snap of snapshots) {
-      for (const doc of snap.docs) {
-        const lat = doc.get('latitude');
-        const lng = doc.get('longitude');
+    for (let snap of snapshots) {
+      for (let doc of snap.docs) {
+        let lat = doc.get('latitude');
+        let lng = doc.get('longitude');
         if(lat != undefined & lng != undefined){
-          const distanceInKm = geofire.distanceBetween([parseFloat(lat), parseFloat(lng)], center);
-          const distanceInM = distanceInKm * 1000;
+          let distanceInKm = geofire.distanceBetween([parseFloat(lat), parseFloat(lng)], center);
+          let distanceInM = distanceInKm * 1000;
           if (distanceInM <= radiusInM) {
             matchingDocs.push(doc);
           }
@@ -162,7 +159,7 @@ function updateToGeoData(collection){
    *  coollection - str : Name of collection concerned
    * Return: Nothing
    */
-  var cityRef = db.collection(collection);
+  let cityRef = db.collection(collection);
   cityRef.get()
   .then(querySnapshot => {
     querySnapshot.docs.map(doc => { 
@@ -236,7 +233,7 @@ if (test == true){
   res.prototype.send = function(val){
     console.log(val)
   }
-  var x = new res()
+  let x = new res()
   x.send("hello")
 
   collection = "dataGouv_Grenoble"
@@ -258,7 +255,7 @@ if (test == true){
   GetValueWhere(res, collection, echelle, value, limit=0)
   GetCountValue(res, collection, echelle, value)
   
-  var center = [45.140195, 5.673187];
-  var rayon = 50 // en km
+  let center = [45.140195, 5.673187];
+  let rayon = 50 // en km
   getArround(res, collection, center, rayon)
 }
