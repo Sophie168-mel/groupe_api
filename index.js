@@ -56,7 +56,8 @@ Paramètres:
 app.post("/pouce", function (req, res) { // OK
   if (IsRequestHeaderAcceptValid(req)) {
     let body = req.body;
-    let configInputData = IsJsonRequestBody(res,data);
+    console.log(body);
+    let configInputData = IsJsonRequestBody(res,body);
     if ( IsJsonRequestBody(res,body) == true ) {
       database.AddPoint(res, collection, body);
     } else

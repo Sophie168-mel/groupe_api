@@ -47,9 +47,9 @@ exports.GetValueWhere = function (res, collection, echelle, valeur, limit=0){
 
   const cityRef = db.collection(collection);
   if (limit == 0){
-    let query = cityRef.where(echelle, '==', valeur)
+    var query = cityRef.where(echelle, '==', valeur)
   } else {
-    let query = cityRef.where(echelle, '==', valeur).limit(limit)
+    var query = cityRef.where(echelle, '==', valeur).limit(limit)
   }
   query.get()
   .then(querySnapshot => {
