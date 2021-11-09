@@ -1,0 +1,58 @@
+[
+  {
+    "num": 0,
+    "code_commune": 34172,
+    "code_departement": 34,
+    "code_region": 76,
+    "description": "Route de Ganges"
+  },
+  {
+    "num": 1,
+    "code_commune": 34172,
+    "code_departement": 34,
+    "code_region": 76,
+    "description": "Ambroise Paré"
+  },
+  {
+    "num": 2,
+    "code_commune": 34172,
+    "code_departement": 34,
+    "code_region": 76,
+    "description": "Euromédecine - Koch"
+  },
+  {
+    "num": 3,
+    "code_commune": "01001",
+    "code_departement": "01",
+    "code_region": 18,
+    "description": "Lyon"
+  },
+  {
+    "num": 4,
+    "code_commune": "06348",
+    "code_departement": "06",
+    "code_region": 76,
+    "description": "Faculté de médecine"
+  },
+  {
+    "num": 5,
+    "code_commune": 78945,
+    "code_departement": 78,
+    "code_region": 12,
+    "description": "Aeroport"
+  },
+  {
+    "num": 6,
+    "code_commune": 98000,
+    "code_departement": 98,
+    "code_region": 76,
+    "description": "maison des jeunes"
+  },
+  {
+    "num": 7,
+    "code_commune": 15245,
+    "code_departement": 15,
+    "code_region": 14,
+    "description": "cinéma gaumont"
+  }
+]
